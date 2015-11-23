@@ -1,0 +1,32 @@
+#tbl {
+    background-color: #333;
+    border: 1px solid gold;
+}
+#tbl td {
+    width: 30px;
+    height: 30px;
+    border: 1px solid silver;
+    text-align: center;
+    color: white;
+    font-size: 24px;
+}
+#selected{
+    background-color: pink;
+}
+.correct{
+    background-color: green;
+}
+.red {
+    background-color: red;
+    height: 20px;
+    width: 20px;
+}
+.long {
+    background-color: purple;
+}
+.error {
+    background-color: red;
+}
+#here {
+    font-size: 32px;
+}
