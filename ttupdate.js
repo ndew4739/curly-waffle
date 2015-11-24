@@ -134,6 +134,7 @@ for(i = 0; i < arr.length; i++){
 }
 
 function locate(){
+    $(  "#links" ).hide();
     $( "#btn_select" ).hide();
     $( "#guessInput" ).focus();
     var locator = ttList.shift();
@@ -145,6 +146,8 @@ function locate(){
     document.getElementById("here").innerHTML = ob.num1 + " X " + ob.num2 + " = ";
     var d = new Date();
     startTime = d.getTime();
+//    cheat function:
+//    document.getElementById("guessInput").value = ob.ans;
 }
 
 function checkAns() {
@@ -172,10 +175,10 @@ function checkAns() {
         arr[pop1][pop2].removeAttr('id','selected').attr('class','error');
         $( '#tbl' ).effect( 'shake' );        
     }
-//    document.getElementById("guessInput").value = ob.ans;
 }
 
 function finish(){
+    $( '#links' ).show();
     $( 'form' ).remove();
     obList.sort(function(a, b) {
         return parseFloat(a.questionID) - parseFloat(b.questionID);
