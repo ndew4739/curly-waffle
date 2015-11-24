@@ -234,7 +234,7 @@ echo $username;
 <script>
 
 $(document).ready(function(){
-  $.get("ttfetchlevel.php", function( data ){
+  $.get("divfetchlevel.php", function( data ){
   level = data;
     setList(level);
     $('#go').click(function(){
