@@ -5,7 +5,7 @@ header("Location: main_login.php");
 }
 $username = $_SESSION['username'];
 
-$db = new mysqli('localhost', 'root', 'password', 'myDb');
+$db = new mysqli('localhost', 'root', 'duckvin', 'myDb');
 
 if($db->connect_errno > 0){
   die('Unable to connect to database [' . $db->connect_error . ']');
