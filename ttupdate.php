@@ -224,7 +224,10 @@ echo $username;
 </table>
 </div>
 <p id = totalTime></p>
+<div id="links">
 <a href=index.php>Back to homepage</a>
+<a href=ttupdate.php>Reload</a>
+</div>
 
 <script src="JQuery.js"></script>
 <script src="jquery-ui.js"></script>
