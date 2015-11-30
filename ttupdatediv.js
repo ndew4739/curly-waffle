@@ -125,12 +125,37 @@ arr = $('#tbl > tbody > tr').map(function ()
     });
 }).get();
 
+arr2 = $('#array > tbody > tr').map(function ()
+{
+    return $(this).children().map(function ()
+    {
+        return $(this);
+    });
+}).get();
+
+
 var te = 0;
 for(i = 0; i < arr.length; i++){
     for(j = 0; j < arr[i].length; j++){
         arr[i][j].attr("data-row", te);
         te++;
     }    
+}
+
+function setArray(num1, num2){
+    for(i=0;i<num1;i++){
+        for(j=0;j<num2;j++){
+            arr2[i][j].show();
+        }
+    }
+}
+
+function clearArray(){
+    for(i=0;i<12;i++){
+        for(j=0;j<12;j++){
+            arr2[i][j].hide();
+        }
+    }
 }
 
 function locate(){
@@ -144,6 +169,7 @@ function locate(){
     var inputElement = document.getElementById('selected');
     ob = new ttData(pop1, pop2, 0, 0);
     document.getElementById("here").innerHTML = ob.num1 + " X " + ob.num2 + " = ";
+    setArray(pop1,pop2);
     var d = new Date();
     startTime = d.getTime();
 //    cheat function:
@@ -155,6 +181,7 @@ function checkAns() {
     if (Uans == ob.ans){
         var d = new Date();
         finTime = d.getTime();
+        clearArray();
         var numBat = (finTime - startTime);
         totalTime = Math.round((numBat + 0.00001) * 100)/ 100000;
         ob.time = totalTime;
@@ -178,7 +205,7 @@ function checkAns() {
 }
 
 function finish(){
-
+    $( '#divMagic' ).hide();
     $( '#links' ).show();
     $( 'form' ).remove();
     obList.sort(function(a, b) {

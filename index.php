@@ -5,14 +5,16 @@ header("Location: main_login.php");
 }
 $username = $_SESSION['username'];
 $Sid = $_SESSION['Sid'];
-$ttlevel = $_SESSION['ttlevel'];
+$ttLevel = $_SESSION['ttlevel'];
+$divLevel = $_SESSION['divlevel'];
 ?>
-
+<!DOCTYPE html>
 <html>
   <head>
   <link rel="stylesheet" type="text/css" href="mystyle.css">
   </head>
   <body>
+
     <div id="banner">
     <ul id="banban">
     <li><?php echo $username; ?></li>
@@ -31,7 +33,42 @@ $ttlevel = $_SESSION['ttlevel'];
     <form method="link" action="doubles.php">
     <input type = "submit" value = "magic doubles button">
     </form>
+    <form method="link" action="targettraining.php">
+    <input type = "submit" value = "Target Practice">
+    </form>
+    <button id="target">Set Target</button>
+    <div class="input-group">
+    <input type="number" id="input" size = 4 autofocus autocomplete="off" class="form-control"/>
+    <input type="button" id="fireButton" value = "submit"/>
+    </div>
     </div>
 <div></div>
+<script src="JQuery.js"></script>
+<script src="jquery-ui.js"></script>
+<script>
+
+$(document).ready(function(){
+$( ".input-group" ).hide();
+
+    $( "#target" ).click(function(){
+        $( ".input-group" ).show();
+        $( "#fireButton" ).click(function(){
+            var target = $( "#input" ).val();
+            if(target > 12){
+                alert("Maximum number is 12");
+            } else {
+            $( ".input-group" ).hide();
+            $( "#target" ).hide();
+            $.post("targetpost.php",
+            {target},
+            function(data){
+            alert(data);
+            
+            }); 
+            }
+        });
+    });    
+});
+</script>
   </body>
 </html>

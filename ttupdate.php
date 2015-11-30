@@ -21,10 +21,13 @@ echo $username;
 <form onsubmit="checkAns();return false;">
 <div class="input-group">
 <p id="here"></p>
+</div>
+<div class="input-group">
 <input type="number" id="guessInput" size = 4 autofocus autocomplete="off" class="form-control"/>
 <input type="button" id="fireButton" value = "submit" class="btn btn-danger"/>
 </div>
 </form>
+<div class="structure">
 <table id="tbl">
     <tr>
         <td></td>
@@ -223,10 +226,14 @@ echo $username;
     </tr>
 </table>
 </div>
+</div>
 <p id = totalTime></p>
 <div id="links">
-<a href=index.php>Back to homepage</a>
-<a href=ttupdate.php>Reload</a>
+<ul>
+<li><a href=index.php>Back to homepage</a></li>
+<li><a href=ttupdate.php>Reload</a></li>
+<li><a id="keys" href=statsRedirect.php>Get Statistics</a></li>
+</ul>
 </div>
 
 <script src="JQuery.js"></script>
