@@ -34,7 +34,7 @@ if($row_cnt==1){
   $_SESSION['ttlevel'] = $result_row->ttlevel;
   $_SESSION['divlevel'] = $result_row->divlevel;
   $_SESSION['user_login_status'] = 1;
-  header("Location: index.php");
+  header("Location: index.html");
 }
 else {
 echo "Wrong Username or Password";
