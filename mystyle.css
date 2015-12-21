@@ -1,0 +1,27 @@
+body{
+  margin: 0 auto;
+  background-color:#94FF94;
+}
+h1 {
+  font-family: "impact";
+  font-size:35px;
+}
+
+#banner{
+position:fixed;
+top: 0;
+height:50px;
+background-color:black;
+color:white;
+width: 100%
+}
+.header {
+margin:60px 20px;
+}
+#banban li {
+  display: inline-block;
+  margin-left:10px;
+}
+#done{
+  color: white;
+}
