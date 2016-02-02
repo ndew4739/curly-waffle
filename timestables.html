@@ -1,0 +1,263 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8">
+    <title>Timestables</title> 
+    <link rel="stylesheet" type="text/css" href="gridcss.css">
+    <script src="JQuery.js"></script>
+    <script src="jquery-ui.js"></script>
+    <script src="ttupdate.js"></script>
+    <script>
+     
+        $.getJSON("checksession.php", function(data) {
+//            console.log(data);
+            // todo: save data locally for offline mode
+        }).fail(function(data) {
+            window.location = "main_login.html";
+        });
+        
+        $( "#answer-form" ).hide();
+        $(document).ready(function(){
+            $.getJSON("ttfetchlevel.php", function( data ){
+                console.log(data.ttBestTime);
+                setList(data.ttlevel);
+                displayTarget(data.ttlevel);
+                displayBestTime(data.ttBestTime);
+                timeArray.bestTime = data.ttBestTime;
+                console.log(timeArray);
+                $( "#level" ).text(data.ttlevel);
+//                console.log(ttList);
+                $('#go').off().on('click', function(){
+                    $("#go").remove();
+                    $(".options").hide();
+                    $("#answer-form").show();
+                    locate();
+                });
+            });
+        });
+    </script>
+</head>
+<body>
+    <div class="container" id="left-menu">
+        <ul id="tt-menu">
+            <a href="#" class="options" id="go"><li>GO!</li></a>
+            <li class="options" id="lev">Level: <span id="level"></span></li>
+            <li class="options">Target Time: <span id="target-time"></span></li>
+            <li class="options" id="bt">Best Time: <span id="best-time"></span></li>
+            <li class="options">This Time: <span id="this-time"></span></li>
+            <li class="options">Accuracy: <span id="accuracy"></span></li>
+            <a href="#" class="options" id="stats"><li>Load Statistics</li></a>
+            <li id="answer-form">
+                <form onsubmit="checkAns();return false;">
+                <div class="input-group">
+                    <p id="here"></p>
+                </div>
+                <div class="input-group">
+                    <input type="number" id="guessInput" size = 4 autofocus autocomplete="off" class="form-control"/>
+                </div>
+            </form></li>
+        </ul>
+    </div>
+    <div class = "container" id="grid-contain">
+        <div class="structure">
+            <table id="tbl">
+                <tr>
+                    <td></td>
+                    <td>1</td>
+                    <td>2</td>
+                    <td>3</td>
+                    <td>4</td>
+                    <td>5</td>
+                    <td>6</td>
+                    <td>7</td>
+                    <td>8</td>
+                    <td>9</td>
+                    <td>10</td>
+                    <td>11</td>
+                    <td>12</td>
+                </tr>
+                <tr>
+                    <td>1</td>
+                    <td></td>
+                    <td></td>
+                    <td></td>
+                    <td></td>
+                    <td></td>
+                    <td></td>
+                    <td></td>
+                    <td></td>
+                    <td></td>
+                    <td></td>
+                    <td></td>
+                    <td></td>
+                </tr>
+                <tr>
+                    <td>2</td>
+                    <td></td>
+                    <td></td>
+                    <td></td>
+                    <td></td>
+                    <td></td>
+                    <td></td>
+                    <td></td>
+                    <td></td>
+                    <td></td>
+                    <td></td>
+                    <td></td>
+                    <td></td>
+                </tr>
+                <tr>
+                    <td>3</td>
+                    <td></td>
+                    <td></td>
+                    <td></td>
+                    <td></td>
+                    <td></td>
+                    <td></td>
+                    <td></td>
+                    <td></td>
+                    <td></td>
+                    <td></td>
+                    <td></td>
+                    <td></td>
+                </tr>
+                <tr>
+                    <td>4</td>
+                    <td></td>
+                    <td></td>
+                    <td></td>
+                    <td></td>
+                    <td></td>
+                    <td></td>
+                    <td></td>
+                    <td></td>
+                    <td></td>
+                    <td></td>
+                    <td></td>
+                    <td></td>
+                </tr>
+                <tr>
+                    <td>5</td>
+                    <td></td>
+                    <td></td>
+                    <td></td>
+                    <td></td>
+                    <td></td>
+                    <td></td>
+                    <td></td>
+                    <td></td>
+                    <td></td>
+                    <td></td>
+                    <td></td>
+                    <td></td>
+                </tr>
+                <tr>
+                    <td>6</td>
+                    <td></td>
+                    <td></td>
+                    <td></td>
+                    <td></td>
+                    <td></td>
+                    <td></td>
+                    <td></td>
+                    <td></td>
+                    <td></td>
+                    <td></td>
+                    <td></td>
+                    <td></td>
+                </tr>
+                <tr>
+                    <td>7</td>
+                    <td></td>
+                    <td></td>
+                    <td></td>
+                    <td></td>
+                    <td></td>
+                    <td></td>
+                    <td></td>
+                    <td></td>
+                    <td></td>
+                    <td></td>
+                    <td></td>
+                    <td></td>
+                </tr>
+                <tr>
+                    <td>8</td>
+                    <td></td>
+                    <td></td>
+                    <td></td>
+                    <td></td>
+                    <td></td>
+                    <td></td>
+                    <td></td>
+                    <td></td>
+                    <td></td>
+                    <td></td>
+                    <td></td>
+                    <td></td>
+                </tr>
+                <tr>
+                    <td>9</td>
+                    <td></td>
+                    <td></td>
+                    <td></td>
+                    <td></td>
+                    <td></td>
+                    <td></td>
+                    <td></td>
+                    <td></td>
+                    <td></td>
+                    <td></td>
+                    <td></td>
+                    <td></td>
+                </tr>
+                <tr>
+                    <td>10</td>
+                    <td></td>
+                    <td></td>
+                    <td></td>
+                    <td></td>
+                    <td></td>
+                    <td></td>
+                    <td></td>
+                    <td></td>
+                    <td></td>
+                    <td></td>
+                    <td></td>
+                    <td></td>
+                </tr>
+                <tr>
+                    <td>11</td>
+                    <td></td>
+                    <td></td>
+                    <td></td>
+                    <td></td>
+                    <td></td>
+                    <td></td>
+                    <td></td>
+                    <td></td>
+                    <td></td>
+                    <td></td>
+                    <td></td>
+                    <td></td>
+                </tr>
+                <tr>
+                    <td>12</td>
+                    <td></td>
+                    <td></td>
+                    <td></td>
+                    <td></td>
+                    <td></td>
+                    <td></td>
+                    <td></td>
+                    <td></td>
+                    <td></td>
+                    <td></td>
+                    <td></td>
+                    <td></td>
+                </tr>
+            </table>
+        </div>
+    </div>
+</body>
+</html>

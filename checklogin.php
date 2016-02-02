@@ -33,6 +33,7 @@ if($row_cnt==1){
   $_SESSION['Sid'] = $result_row->Sid;
   $_SESSION['ttlevel'] = $result_row->ttlevel;
   $_SESSION['divlevel'] = $result_row->divlevel;
+  $_SESSION['ttBestTime'] = $result_row->ttBestTime;
   $_SESSION['user_login_status'] = 1;
   header("Location: index.html");
 }

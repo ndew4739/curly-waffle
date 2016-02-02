@@ -1,11 +1,35 @@
 body {
-background-color: black;
 color: white
 }
 
-li {
-    display: inline-block;
-    margin: 5px;
+.container{
+    position: relative;
+    display: table-cell;
+}
+
+#left-menu{
+    margin: 40px 10px;
+    width:20%;
+    height:100%;
+    background-color: black;
+    float: left;
+    text-align: center;
+}
+
+#tt-menu{
+    margin: 0px 0px;
+    padding: 0px 0px;
+    list-style-type: none;
+}
+
+#tt-menu li {
+    display: block;   
+    padding:15px 0 15px 0; 
+    border-bottom:#1d1f20 1px solid;
+}
+
+#answer-form{
+    border: 3px solid #fff;
 }
 
 .structure{
@@ -34,6 +58,7 @@ li {
     border:none;
     margin:0;
 }
+
 .array td {
     width: 20px;
     height: 24px;
@@ -43,20 +68,6 @@ li {
     background-color: white;
     color: black;
     font-size:14px bold;
-}
-
-button {
-    border-radius: 5px;
-}
-
-button a {
-    color: black;
-}
-
-#go {
-    padding: 10px;
-    margin-left: 10px;
-    font-size: 18px;
 }
 
 .input-group {
@@ -83,20 +94,16 @@ a:hover{
     color:white;
 }
 
-form {
-    margin-left: 20px
-}
-
 table {
     background-color: #333;
-    border: 3px solid gold;
-    margin-left: 20px;
+ #   border: 3px solid gold;
+    margin: 20px 20px;
+    border-collapse: collapse;
 }
 
 a {
     text-decoration: none;
     color: white;
-    font-size: 18px;
 }
 
 table td, th {

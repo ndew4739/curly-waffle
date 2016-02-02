@@ -1,0 +1,43 @@
+
+#main-div{
+	height: 500px;
+}
+form{
+	width:200px;
+	margin:auto;
+}
+input,button { 
+	margin:0px; 
+}
+
+
+#answer{
+	width:98%; 
+	height:35px;
+}
+
+#operation{
+	width:98%; 
+	height:35px;
+}
+
+#incorrect{
+	margin-top:40px;
+	width: 200px;
+	height: 35px;
+	position:absolute;
+	text-align: center;
+}
+
+input {
+	width:50px; 
+	height:50px; 
+	float:left;
+}
+
+#C{
+	width:50px; 
+	height:50px; 
+	float:left; 
+	color:red;
+}

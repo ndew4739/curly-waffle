@@ -154,7 +154,7 @@ function finish(){
   totalTime = Math.round((numBat + 0.00001) * 100)/ 100000;
   $('form').remove();
   $( '#links' ).show();
-  $( "#totalTime" ).text("BABOOM! Game over")
+  $( "#totalTime" ).text("Kaboom! Game over")
 //  console.log(totalTime);
   var accuracy = (60/(60 + errorCount))*100;
   var acc = accuracy.toFixed(2);

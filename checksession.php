@@ -7,7 +7,8 @@ if(!$_SESSION['user_login_status']==1){
 		'username'=>$_SESSION['username'],
 		'Sid'=>$_SESSION['Sid'],
 		'ttLevel'=>$_SESSION['ttlevel'],
-		'divLevel'=>$_SESSION['divlevel']
+		'divLevel'=>$_SESSION['divlevel'],
+		'ttBestTime'=>$_SESSION['ttBestTime']
 	);
 
 	echo json_encode($arr);

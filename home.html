@@ -1,0 +1,158 @@
+<!DOCTYPE HTML>
+<html>
+<head>
+<meta charset="utf-8">
+<title>Home</title>
+<link rel="stylesheet" type="text/css" href="home.css">
+    <script src="JQuery.js"></script>
+<script src="jquery-ui.js"></script>
+<script>
+
+// check user session
+$.getJSON("checksession.php", function(data) {
+	console.log(data);
+    // todo: save data locally for offline mode
+    }).fail(function(data) {
+      window.location = "main_login.html";
+    });
+
+$(document).ready(function(e) {
+	var username = $("#user-name").text();
+	var dataObject = {
+	username: username,
+	sum: "empty",
+	correct: false,
+	attempts: []
+	};
+	
+	function resetObject(){
+		dataObject.sum = "empty";
+		dataObject.correct = false;
+		dataObject.attempts = [];
+	}
+
+	$("#submit").hide();
+	$('#equals').attr('onclick','return false');
+	$(".number").click(function(){
+		var v = $(this).val();
+		$('#answer').val($('#answer').val() + v);
+		$('#answer').focus();
+		$('#equals').attr('onclick','');
+	});
+	$('.operator').click(function(){
+		if (isNaN($('#answer').val().slice(-1))){
+//			console.log("not a number");
+		} else if ($('#answer').val().slice(-1) == ""){
+//			console.log("nothing");
+		} else {
+			var v = $(this).val();
+			$('#operation').val($('#operation').val() + $('#answer').val() + v);
+			$('#answer').val('');
+			$('#equals').attr('onclick','return false');
+		}
+	})
+	$('#minus').click(function(){
+		if($('#answer').val().slice(0,1) != "-"){
+//			console.log("not negative");
+			$('#answer').val("-" + $('#answer').val());
+		} else {
+//			console.log("negative");
+			$('#answer').val($('#answer').val().slice(1));
+		}
+	})
+	$('#bksp').click(function(){
+		$('#answer').val($('#answer').val().slice(0,-1));
+		$('#answer').focus();
+	})
+	$('#C').click(function(){
+		$('#answer').val('');
+		$('#operation').val('');
+		$('#operation').removeClass('activeAnswer');
+		$('#equals').attr('onclick','');
+	});
+	$('#equals').click(function(){
+		
+		if($('#equals').attr('onclick') != 'return false'){
+			$('#operation').val($('#operation').val() + $('#answer').val())
+			var a = $('#operation').val();
+			$('#answerStash').val(eval(a));
+			var v = $(this).val();
+			$('#operation').val($('#operation').val() + v);
+			dataObject.sum = $('#operation').val();
+			$('#answer').val('');
+			$('#equals').hide();
+			$('#submit').show().prop("disabled", false);
+			$('#submit').off().on('click',function(){
+				dataObject.attempts.push($('#answer').val());
+				if($("#answer").val() === $("#answerStash").val()){
+					dataObject.correct = true;
+					var x=JSON.stringify(dataObject);
+					$.post("calculator-process.php", x, function(data){
+						console.log(data);
+					});
+					$('#operation').val($('#operation').val() + $("#answer").val())
+					$('#answer').val("correct!");
+					$('input').attr('disabled','disabled');
+					$('button').attr('disabled','disabled');
+					$('#C').removeAttr('disabled');
+					$('#C').click(function(){
+						$('#answer').val('');
+						$('#answerStash').val('');
+						$('#operation').val('');
+						$('#equals').show().attr('onclick','return false');
+						$('#submit').hide();
+						$('input').removeAttr('disabled');
+						$('button').removeAttr('disabled');	
+						resetObject();		
+					});
+				} else {
+					$('#answer').val('');
+					$('span').text("incorrect").show().fadeOut(1000);
+					$('#answer').hide().fadeIn(1000);
+					$('.operator').attr("disabled","disabled");
+				}
+//				console.log(JSON.stringify(dataObject));
+			});
+		} else {
+			$('#answer').focus();
+		}
+	});
+});
+</script>
+</head>
+
+<body>
+<div id="main-div">
+<div id="calcContainer">
+    <form onsubmit="checkAnswer(); return false;" id="calculator">
+    	<input type="text" id="answerStash" value="" hidden/>
+    	<input type="text" id="operation" value=""/>
+    	<input type="text" id="answer" value="" disabled="disabled"/>
+    	<div id="incorrect"><span></span></div>
+     	<input type="button" class="operator" value="+" id="plus" />
+        <input type="button" class="operator" value="-" id="subtract" />
+        <input type="button" class="operator" value="/" id="divide" />
+        <input type="button" class="operator" value="*" id="product" />
+        <input type="button" class="number" value="1" id="1" />
+        <input type="button" class="number" value="2" id="2" />
+        <input type="button" class="number" value="3" id="3" />
+        <input type="button" class="number" value="4" id="4" />
+        <input type="button" class="number" value="5" id="5" />
+        <input type="button" class="number" value="6" id="6" />
+        <input type="button" class="number" value="7" id="7" />
+        <input type="button" class="number" value="8" id="8" />
+        <input type="button" class="number" value="9" id="9" />
+        <input type="button" class="number" value="0" id="0" />
+        <input type="button" class="number" value="." id="point" />
+        <input type="button" class="neg" value="+/-" id="minus" />
+        <input type="button" value="C" id="C" />
+        <input type="button" value="BKSP" id="bksp">
+        <input type="button" value="=" id="equals" />
+        <button type="button" id="submit" value="check" disabled="disabled">Check</button>
+    </form>
+</div>
+</div>
+    <div style="clear:both;"></div>
+</div>
+</body>
+</html>

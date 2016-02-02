@@ -12,6 +12,7 @@ var finTime;
 var totalTime;
 
 var timeArray = {
+bestTime: 0,
 error: 0,
 times: []
 
@@ -74,6 +75,39 @@ function logArray(array){
   }
 }
 
+function displayTarget(ttLevel){
+    var targetTime;
+    var ttLevel = ttLevel;
+    console.log(ttLevel);
+    switch(ttLevel){
+        case "1":
+        case "2":
+            targetTime = "2:00";
+            break;
+        case "3":
+        case "4":
+            targetTime = "3:00";
+            break;
+        default:
+            targetTime = "5:00";
+    }
+    $("#target-time").text(targetTime);
+}
+
+function secToTime(totalSeconds){
+var minutes = parseInt(totalSeconds/60) % 60;
+var seconds = totalSeconds % 60;
+var time = (minutes < 10 ? "0" + minutes : minutes) + ":" + (seconds < 10 ? "0" + seconds : seconds);
+return time;
+}
+
+function displayBestTime(bestTime){
+    if(bestTime > 0){
+        $("#best-time").text(secToTime(bestTime));
+    } else {
+        $("#best-time").text("n/a");
+    }
+}
 
 function setList(ttLevel) {
     var ttLevel = ttLevel; 
@@ -134,8 +168,6 @@ for(i = 0; i < arr.length; i++){
 }
 
 function locate(){
-    $(  "#links" ).hide();
-    $( "#btn_select" ).hide();
     $( "#guessInput" ).focus();
     var locator = ttList.shift();
     pop1 = locator[0];
@@ -147,7 +179,7 @@ function locate(){
     var d = new Date();
     startTime = d.getTime();
 //    cheat function:
-//    document.getElementById("guessInput").value = ob.ans;
+    document.getElementById("guessInput").value = ob.ans;
 }
 
 function checkAns() {
@@ -162,6 +194,7 @@ function checkAns() {
         obList.push(ob);
         arr[pop1][pop2].text(ob.ans);
         arr[pop1][pop2].removeAttr('id','selected').attr('class','correct');
+        $("#answer-form").css("border", "5px solid green");
         if(ttList.length > 0){
         document.getElementById("guessInput").value = "";
             locate();
@@ -173,14 +206,15 @@ function checkAns() {
         ob.err++;
         document.getElementById("guessInput").value = "";
         arr[pop1][pop2].removeAttr('id','selected').attr('class','error');
+        $("#answer-form").css("border", "5px solid red")
         $( '#tbl' ).effect( 'shake' );        
     }
 }
 
 function finish(){
 
-    $( '#links' ).show();
-    $( 'form' ).remove();
+    $( '.options' ).show();
+    $( '#answer-form' ).remove();
     obList.sort(function(a, b) {
         return parseFloat(a.questionID) - parseFloat(b.questionID);
     });
@@ -193,10 +227,19 @@ function finish(){
 //      console.log(jlist);
     $.post("ttprocess.php",
     jlist,
-    function(response,status){
-    var totalTime = response;
-    $( "#totalTime" ).text("Total time: " + totalTime);
-    alert("*----Received Data----*\n\nResponse : " + totalTime +"\n\nStatus : " + status);    
+    function(response){
+    var returnJSON = JSON.parse(response);
+    console.log(returnJSON);
+    if(returnJSON.newLevel){
+        alert("New Level: " + returnJSON.newLevel + "!!");
+        $("#level").text(returnJSON.newLevel);
+        $("#best-time").text(returnJSON.totalTime);
+    } else if (returnJSON.bestTime){
+        alert("New Best Time: " + returnJSON.totalTime + "!!!");
+        $("#best-time").text(returnJSON.totalTime);
+    }
+    $("#this-time").text(returnJSON.totalTime);
+    $("#accuracy").text(returnJSON.accuracy);
     });
     for(i = 0; i < obList.length; i++) {
         var bb = obList[i].time;

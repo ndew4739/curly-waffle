@@ -12,19 +12,15 @@
     </script>
 </head>
 <body>
-
-<p id = "totalTime"></p>
-<div id="links">
-<a href=index.php>Back to homepage</a>
-<a href=targettraining.php>Reload</a>
-</div>
-<div id="btn_select">
+<div id="mainCon" style="margin-left:100px">
+<p id = "totalTime" style="color:black"></p>
+<div id="btn_select" style="padding-left:400px">
 <button id="go">GO!</button>
 </div>
 <div class = "container">
 <form onsubmit="checkAns();return false;">
 <div class="input-group">
-<p id="here"></p>
+<p id="here" style="color:black"></p>
 </div>
 <div class="input-group">
 <input type="number" id="guessInput" size = 4 autofocus autocomplete="off" class="form-control"/>
@@ -113,7 +109,7 @@
 
 
 </div>
-
+</div>
 <script>
 
 $(document).ready(function(){

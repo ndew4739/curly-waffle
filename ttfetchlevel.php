@@ -12,15 +12,15 @@ if($db->connect_errno > 0){
 }
 
 $sql = "
-SELECT ttlevel
+SELECT ttlevel, ttBestTime
 FROM MyStudents
 WHERE username = '$username'";
 if(!$result = $db->query($sql)){
   die('There was an error running the query [' . $db->error . ']');
 }
 
-$level = $result->fetch_assoc();
-echo $level['ttlevel'];
+$level = $result->fetch_object();
+echo json_encode($level);
 
 mysqli_close($conn);
 ?>
