@@ -1,0 +1,145 @@
+<html>
+<head>
+<link rel="stylesheet" href="style.css">
+<link rel="stylesheet" href="font-awesome/css/font-awesome.min.css">
+<link rel="stylesheet" type="text/css" href="jquery-ui.css">
+<script src="jquery-1.11.3.min.js"></script>
+<script src="jquery-ui.min.js"></script>
+<script>
+
+ 
+/*
+  var username = $( '#user-name' ).text();
+  var postData;
+
+  function sendWord(username, word){
+    postData = JSON.stringify({"username": username, "word": word});
+    $.post("known-word.php", {postData}, function(data){
+      console.log(data);
+      $("#main-section").load('my-words.html');
+    }).fail(function(){
+      alert("error");
+    })
+  }
+
+  function sendToTeach(word){
+    var obj = {'username': username, 'title': 'student', 'comment': word, 'code':3};
+    var sent = JSON.stringify(obj);
+    $.post('log-message.php', sent, function(data){
+      console.log(data);
+      //alert("Message sent");
+    });
+  }
+
+  function isListed(word){
+    $.getJSON("wordlist.json",function(data){
+      var res = data;
+      var result = res.indexOf(word);
+      if(result == -1){
+        var r = confirm("Word is not on list\n\nClick OK to send to teacher");
+        if(r == true){
+            sendToTeach(word);
+          } else {
+          alert ("Cancelled")
+        }
+      } else {
+//        alert(result);
+        sendWord(username, word);
+      }
+    });
+  }
+
+  $.getJSON("wordlist.json",function(data){
+    var res = data;
+    $("#search").autocomplete({ 
+      source: res,
+      minLength: 3,
+      delay: 0
+
+    });
+  });
+
+
+  function word(){
+    var input = $( "#search" ).val();
+//    console.log(input);
+    isListed(input)
+  }
+*/
+  function loadTable(){
+
+  var myClass = $('#myClass').text();
+  console.log(myClass);
+    $.post("fetchThemeWords.php", {myClass}, function(data){
+      console.log($.parseJSON(data));
+      if(data){
+      var lists = $.parseJSON(data);
+      listNum = lists.length;
+      for(i=0;i<listNum;i++){
+        var unsort = $.parseJSON(lists[i].words);
+        var sorted = unsort.sort();
+        var count = parseInt(sorted.length/7) + 1;
+        var table = '<br><table><tr><th colspan="7" style = "text-align: center">' + lists[i].title + '</th></tr>';
+        for(j=0; j<count; j++){
+          table += '<tr>';
+            for(k=0; k<7; k++){
+              if(sorted.length==0){
+                break;
+              } else {                
+              table += '<td>' + sorted.shift() + '</td>';
+              }
+            }
+          table += '</tr>';
+        }
+        table += '</table>';
+        $( '#table-here' ).append(table);
+//        console.log(sorted);
+      }
+    }
+/*
+      wlist.sort();
+
+      } else {
+        $('#table-here').append("<p style='color: #ffaa71'>No words added yet</p>");
+      }
+      */
+    });
+  }
+  
+  $(document).ready(function(){
+     $.getJSON("checksession.php", function(data) {
+    console.log(data)
+      $( '#username' ).text(data.username);
+      $( '#myClass' ).text(data.class);
+       loadTable();
+    }).fail(function(data) {
+      window.location = "main-login.html";
+    });
+
+   
+    console.log($('#myClass').text());
+  });
+</script>
+</head>
+<body>
+  <div class="box" style="display: none">
+      <div class="container-1">
+        <form action="javascript:word()">
+          <span class="icon"><i class="icon-search"></i></span>
+          <input type="search" id="search" placeholder="Add..." />
+        </form>
+      </div>
+  </div>
+
+  <div>
+    <h1>Theme Lists<span id="name-here"></span></h1>
+    <div id="table-here"></div>
+  </div>
+    <div id="student" style="display:none">
+    <table>
+      <tr><td id="username"></td></tr>
+      <tr><td id="myClass"></td></tr>
+    </table>
+
+</body>
+</html>

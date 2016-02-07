@@ -1,0 +1,200 @@
+<html>
+<head>
+  <link rel="stylesheet" href="style.css">
+  <script src="jquery-1.11.3.min.js"></script>
+  <script src="jquery-ui.min.js"></script>
+  <script>
+$(document).ready(function(){
+  var input_row = '<tr class="data-row"><td></td><td><input type="text" class="addFirstname" name="firstname"></td><td><input type="text" class="addSurname" name="surname"></td><td></td><td><input type="button" class="addYear"></td><td><input type="button" class="addSex" value="F"></td><td class="pass"></td><td class="class"></td><td><input class="delete" type="button" value="delete"></td></tr>';
+	$.getJSON("fetch-class.php", function(data) {
+    if(data.length>0){
+      for(i=0;i<data.length;i++){
+        $('#stList').append("<tr><td class = 'SID'>"+data[i].Sid+"</td><td class='firstname'>"+data[i].firstname+"</td><td class='surname'>"+data[i].lastname+"</td><td class='username'>"+data[i].username+"</td><td class='year'>"+data[i].year+"</td><td class='sex'>"+data[i].sex+"</td><td class='password'>"+data[i].password+"</td><td class='class'>"+data[i].class+"</td><td class='editCell'><button class='edit'>Edit</button></td><td class='disMe'><button class='remove'>Remove</button>");
+      }
+    } else {
+      console.log("No students");
+      $('#addSt').remove();
+      $('#tableCont').remove();
+      $('#add-class').show().off().on( 'click', function(){
+        $('#main-section').load('class-add.html');
+      });
+    }
+    $(".edit").off().on('click', function(){
+      $('.disMe').hide();
+      $(".edit").prop('disabled', true);
+      x = $(this).parent().siblings();
+      $(this).hide();
+      $(this).parent().append('<button class="submit">Submit</button><button class="cancel">Cancel</button>');
+      $(x).each(function(){
+        var y = "'" + $(this).text() + "'";
+        console.log(y);
+        $(this).append('<input type="text" class="altered" value='+y+'>');
+        $('.SID').children().prop('disabled', true);
+      })
+      $('.cancel').off().on('click', function(){
+        $('.altered').remove();
+        $('.submit').remove();
+        $('.cancel').remove();
+        $('.edit').show().prop('disabled', false);
+        $('.disMe').show();
+      });
+      $('.submit').off().on( 'click', function(){
+        var obj={};
+        $('.altered').each(function(){
+          var y = $(this).val();
+          var x = $(this).parent().attr('class');
+          obj[x]=y
+        });
+        console.log(obj);
+        var JSONobj = JSON.stringify(obj);
+        $.post("update-student.php", JSONobj, function(data){
+        })
+        .fail(function(){
+          console.log(data)
+        })
+        .done(function(data){
+          alert("Record updated for " + obj.username);
+          $('#main-section').load("class.html");
+        });
+      });
+    });
+    $('.remove').off().on( 'click', function(){
+      var remObj = {}
+      var x = $(this).parent().siblings(".SID").attr('class');
+      var y = $(this).parent().siblings(".SID").text();
+      var z = $(this).parent().siblings(".username").text();
+      remObj[x] = y;
+      var JSONrem = JSON.stringify(remObj); 
+      if(confirm("Remove " + z + " from your class list?")){
+        $.post("remove-student.php", JSONrem, function(data){
+          console.log(data);
+          $('#main-section').load("class.html");
+        })
+        .fail(function(){
+          alert("Cannot delete student. Contact administrator");
+        })
+      } 
+    });
+    $('#add-student').off().on( 'click', function(){
+      $('#stList').append(input_row);
+      $('.addSubmit').show();
+      var composite = true;
+      var lowYear;
+      var highYear;
+      $.getJSON("checksession.php", function(data) {
+        var a = data.class;
+        years = a.match(/\d/g);
+        lowYear = years[0];
+        $(".addYear").attr('value', lowYear);
+        if(years.length === 1){
+          composite = false;
+        } else {
+          highYear = years[1];
+        }
+        var b = a.replace("/", "");
+        var pass = b.toLowerCase();
+        $('.class').html(a);
+        $('.pass').html(pass);
+        console.log(pass);
+        $(".addYear").off().on('click',function(){
+          console.log("clicked");
+          if(composite){
+            if($(this).val()==lowYear){
+              $(this).attr('value', highYear);
+            } else {
+              $(this).attr('value', lowYear);
+            }
+          } else {
+            return false;
+          }
+        })
+        $(".addSex").off().on('click', function(){
+          console.log("clicked");
+          if($(this).val()=='F'){
+            $(this).attr('value', "M");
+          } else {
+            $(this).attr('value', "F");
+          }
+        });
+        $(".delete").off().on( 'click' ,function(){
+          $(this).closest('tr').remove();
+        });
+      }).fail(function(data) {
+        alert("This function is not currently working. Contact administrator");
+      });
+      $('#new-cancel').off().on('click', function(){
+        $('.data-row').remove();
+        $('.addSubmit').hide();
+      })
+      $('#new-submit').off().on('click', function(event){
+        var formDATA = [];      
+        $('.data-row').each(function(){
+          var obj = {}
+          var f = $( this ).find(".addFirstname").val();
+          var g = $( this ).find(".addSurname").val();
+          var h = $( this ).find(".addSex").val();
+          var i = $( this ).find(".addYear").val();
+          var j = $( this ).find(".pass").html();
+          var userF = f.toLowerCase();
+          var userG = g.toLowerCase();
+          if (f) {
+            obj.firstname = f.replace(/ /g,'');
+            obj.surname = g.trim();
+            obj.username = obj.firstname.toLowerCase() + "." + obj.surname.replace(/ /g,'').toLowerCase();
+            obj.sex = h;
+            obj.year=i;
+            obj.pass=j;
+            formDATA.push(obj);
+            } else {
+              return false;
+            }
+        });
+        var JSONlist = JSON.stringify(formDATA);
+        console.log(JSONlist);
+        $.post("add-class.php", JSONlist, function(data){
+        })
+        .fail(function(){
+          alert("Error adding student. Contact administrator.")
+        })
+        .done(function(data){
+          console.log(data);
+          $("#main-section").load("class.html");
+//      window.location = "index.html";
+        })
+      })
+    });
+  });
+});
+  </script>
+</head>
+<body>
+  <div id="addCont">
+    <button id="add-class" class="modButtons">+ Add Class</button>
+  </div>
+  <div id="addSt">
+    <button id="add-student" class="modButtons">+ Add Student</button>
+  </div>
+  <div id="tableCont">
+    <table id="stList">
+      <tr id="stHead">
+        <th>SID</th>
+        <th>First Name</th>
+        <th>Surname</th>
+        <th>Username</th>
+        <th>Year</th>
+        <th>M/F</th>
+        <th>Password</th>
+        <th>Class</th>
+        <th colspan='2'></th>
+
+      </tr>
+    </table>
+  </div>
+  <div id="contAdd">
+    <button id="new-submit" class="addSubmit">Submit</button>
+    <button id="new-cancel" class="addSubmit">Cancel</button>
+  </div>
+</body>
+</html>
+</body>
+</html>

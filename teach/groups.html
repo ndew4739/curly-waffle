@@ -1,0 +1,41 @@
+<html>
+<head>
+  <link rel="stylesheet" href="style.css?v=4">
+  <script src="jquery-1.11.3.min.js"></script>
+  <script src="jquery-ui.min.js"></script>
+  <script>
+  $(document).ready(function(){
+  	$.getJSON("fetch-class.php", function(data) {
+    	if(data.length>0){
+      		for(i=0;i<data.length;i++){
+        		$('#main-div').append('<div class="nameTag present" style="border-radius:5px; margin: 10px 10px 10px 10px; position:relative; height:50px;width:100px;text-align:center; display:inline-block" data-sid='+data[i].Sid+'><div style="position:absolute; margin-left:15px; margin-top:7px"><div style="overflow:hidden; text-overflow:ellipsis; height: 18px; width: 85px; font-size: 18px; text-align: left">'+data[i].firstname+'</div><div style="overflow: hidden; text-overflow: ellipsis; height: 18px; width: 85px; font-size: 16px; text-align:left">'+data[i].lastname+'</div></div></div>');
+      		};
+    	} else {
+      		Alert("You need to add your class first.");
+        	$('#main-section').load('class-add.html');
+    	};
+	    $('.nameTag').click(function(){
+	    	if ($(this).hasClass('present')){
+	    		$(this).removeClass('present');
+	    		$(this).addClass('absent');
+	    	} else if ($(this).hasClass('absent')) {
+	    		$(this).removeClass('absent');
+	    		$(this).addClass('present');
+	    	};
+	    })
+	    $('#attendance').off().on( 'click', function(){
+	    	$('.absent').remove();
+	    	$('#low-bar').remove();
+	    	$('.nameTag').each(function(){
+	    		$(this).removeClass('present').css('background-color', '#cfebfd');
+	    	})
+	    })
+	});
+});  
+  </script>
+</head>
+<body>
+	<div id="main-div"></div>
+	<div id="low-bar"><div id="removeMsg"><p>Remove absent students</p></div><button id="attendance">Completed</button></div>
+</body>
+</html>

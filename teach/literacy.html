@@ -1,0 +1,17 @@
+<html>
+<head>
+<link rel="stylesheet" href="style.css?v=5">
+<script src="jquery-1.11.3.min.js"></script>
+<script src="jquery-ui.min.js"></script>
+<script>
+	$('#themeList').off().on( 'click', function(){
+		$('#main-section').load('themeList.html');
+	})
+</script>
+</head>
+<body>
+	<h1>Literacy</h1>
+	<a href = "#" class="divTab"><div class="litOption" id="themeList"><p>Theme Lists</p></div></a>
+	<a href = "#" class="divTab"><div class="litOption" id="puncTask"><p>Punctuation Tasks</p></div></a>
+</body>
+</html>

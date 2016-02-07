@@ -1,0 +1,28 @@
+<html>
+<head>
+  <link rel="stylesheet" href="style.css">
+  <script src="jquery-1.11.3.min.js"></script>
+  <script src="jquery-ui.min.js"></script>
+  <script>
+  	$.getJSON("checksession.php", function(data) {
+    	$( '#user-name' ).text(data.title + " " + data.last_name);
+      	console.log(data);
+    }).fail(function(data) {
+    	$("#login-section").load("teacher-login.html");
+    });
+  </script>
+</head>
+<body>
+  <form action="database1.php" method="post">
+  First Name: <input type="text" name="firstname"><br>
+  Last Name: <input type="text" name="lastname"><br>
+  <input type="radio" name="sex" value="male"> Male <br>
+  <input type="radio" name="sex" value="female" checked> Female <br>
+  <input type="radio" name="year" value="3"> 3 <br>
+  <input type="radio" name="year" value="4" checked> 4 <br>
+  <input type="submit">
+  </form>
+</body>
+</html>
+</body>
+</html>

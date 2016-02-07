@@ -1,0 +1,122 @@
+<html>
+<head>
+  <link rel="stylesheet" href="style.css">
+  <script src="jquery-1.11.3.min.js"></script>
+  <script src="jquery-ui.min.js"></script>
+  <script>
+$(document).ready(function(){
+  var composite;
+  var lowYear;
+  var highYear;
+	var max_fields = 35;
+	var init_num = 30;
+	var input_row = '<tr class="data-row"><td><input type="text" class="firstname" name="firstname"></td><td><input type="text" class="surname" name="surname"><td><input type="button" class="sex" value="F"></td><td><input type="button" class="year"></td><td class="class"></td><td class="pass"></td>';
+	for(i=0; i<init_num; i++){
+		$('table').append(input_row);
+	}
+  	$.getJSON("checksession.php", function(data) {
+    	var a = data.class;
+      years = a.match(/\d/g);
+      lowYear = years[0];
+      $(".year").attr('value', lowYear);
+      if(years.length === 1){
+        composite = false
+      } else {
+        highYear = years[1];
+      }
+    	var b = a.replace("/", "");
+    	var pass = b.toLowerCase();
+    	$('.class').html(a);
+    	$('.pass').html(pass);
+    	console.log(pass);
+    }).fail(function(data) {
+    	$("#login-section").load("teacher-login.html");
+    });
+    $(".sex").off().on('click', function(){
+    	if($(this).val()=='F'){
+    		$(this).attr('value', "M");
+    	} else {
+    		$(this).attr('value', "F");
+    	}
+    })
+    $(".year").off().on('click',function(){
+      if(!composite){
+        if($(this).val()==lowYear){
+          $(this).attr('value', highYear);
+        } else {
+          $(this).attr('value', lowYear);
+        }
+      } else {
+        return false;
+      }
+    })
+    $('#student-list').submit(function(event){
+		var formDATA = [];    	
+    	$('.data-row').each(function(){
+		//$("#UndefinedTable tr").each(function(k){
+			var obj = {}
+			var f = $( this ).find(".firstname").val();
+			var g = $( this ).find(".surname").val();
+      var h = $( this ).find(".sex").val();
+      var i = $( this ).find(".year").val();
+      var j = $( this ).find(".pass").html();
+      var userF = f.toLowerCase();
+      var userG = g.toLowerCase();
+			if (f) {
+				obj.firstname = f.replace(/ /g,'');
+				obj.surname = g.trim();
+				obj.username = obj.firstname.toLowerCase() + "." + obj.surname.replace(/ /g,'').toLowerCase();
+        obj.sex = h;
+        obj.year=i;
+        obj.pass=j;
+    		formDATA.push(obj);
+    		} else {
+    			return false;
+    		}
+    	});
+    	
+    	//formDATA.push(obj);
+		//});
+		var JSONlist = JSON.stringify(formDATA);
+    $.post("add-class.php", JSONlist, function(data){
+    })
+    .fail(function(){
+      alert("Error creating class. Contact administrator.")
+    })
+    .done(function(data){
+        console.log(data);
+//      window.location = "index.html";
+    })
+
+/*	    var g = $('input').map(function(){
+	    	return $( this ).val();
+	    }).get().join(", ");
+	    console.log(g);*/
+	    event.preventDefault();
+	});
+});
+  </script>
+</head>
+<body>
+	<div id="teacher-profile"></div>
+  <form id="student-list" action="add-class.php" method="post">
+  	<fieldset>
+  	<table>
+  		<tr>
+			<th>First Name: </th>
+			<th>Last Name: </th>
+			<th>M/F</th>
+      <th>Year</th>
+			<th>Class</th>
+			<th>Password</th>
+		</tr>
+  	</table>
+  </fieldset>
+  <fieldset>
+  	<input id="submit" type="submit">
+  </fieldset>
+  </form>
+</body>
+</html>
+</body>
+</html>

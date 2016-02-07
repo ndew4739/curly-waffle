@@ -1,0 +1,78 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <link rel="stylesheet" type="text/css" href="mystyle.css">
+    <script src="JQuery.js"></script>
+    <script src="jquery-ui.js"></script>
+    <script>
+
+    // check user session
+    $.getJSON("checksession.php", function(data) {
+      $( '#user-name' ).text(data.username);
+      // todo: save data locally for offline mode
+
+    }).fail(function(data) {
+      window.location = "main_login.html";
+    });
+
+    $(document).ready(function() {
+      $("#load-here").load("home.html");
+      $(".current-page").text("Home");
+      $(".menu").hide();
+      $( ".hamburger" ).off().on('click', function() {
+        $( ".menu" ).toggle( "slide", "left" );
+      });
+      $("#home").click(function(){
+        $('.menu').hide();
+        $('#load-here').load("home.html");
+        $('.current-page').text("Home");
+      });
+      $("#timestables").click(function(){
+//        $("#timestables").hide();
+        $(".menu").hide();
+        $("#load-here").load("timestables.html");
+        $(".current-page").text("Timestables");
+        })
+      $('#tPractice').off().on('click', function(){
+        $(".menu").hide();
+        $("#load-here").load("targettraining.html");
+        $(".current-page").text("Target Training");
+      })
+      $('#setTarg').off().on('click', function(){
+        $(".menu").hide();
+        $("#load-here").load("set-target.html");
+        $(".current-page").text("Set Target");
+      })
+      });
+
+      
+    </script>
+  </head>
+  <body>
+
+    <header id="banner">
+      <ul id="left-side">
+        <a href="#"><li class="hamburger">&#9776; Menu</li></a>
+        <li class="current-page"></li>
+      </ul>
+      <ul id="right-side">
+        <li id="user-name"></li>
+        <li><a id="title" href = "../index.html">title</a></li>
+        <li><a id="done" href = "logout.php">logout</a></li>
+      </ul>
+    </header>
+    <div class="menu">
+      <ul id="main-menu">
+        <a href="#"><li id="home">Home</li></a>
+        <a href="#"><li id="timestables">Timestables</li></a>
+        <a href="#" id="tPractice"><li>Target Practice</li></a>
+        <a href="#" id="setTarg"><li>Set Target</li></a>
+        <a href="#"><li>Division</li></a>
+        <a href="#"><li>Doubles</li></a>
+        <a href="#"><li>Halving</li></a>
+      </ul>
+    </div>
+    <div id="load-here"></div>
+    
+  </body>
+</html>

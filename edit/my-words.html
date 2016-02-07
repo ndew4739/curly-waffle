@@ -1,0 +1,115 @@
+<html>
+<head>
+<link rel="stylesheet" href="style.css">
+<link rel="stylesheet" href="font-awesome/css/font-awesome.min.css">
+<link rel="stylesheet" type="text/css" href="jquery-ui.css">
+<script src="jquery-1.11.3.min.js"></script>
+<script src="jquery-ui.min.js"></script>
+<script>
+
+  var username = $( '#user-name' ).text();
+  var postData;
+
+  function sendWord(username, word){
+    postData = JSON.stringify({"username": username, "word": word});
+    $.post("known-word.php", {postData}, function(data){
+      console.log(data);
+      $("#main-section").load('my-words.html');
+    }).fail(function(){
+      alert("error");
+    })
+  }
+
+  function sendToTeach(word){
+    var obj = {'username': username, 'title': 'student', 'comment': word, 'code':3};
+    var sent = JSON.stringify(obj);
+    $.post('log-message.php', sent, function(data){
+      console.log(data);
+      //alert("Message sent");
+    });
+  }
+
+  function isListed(word){
+    $.getJSON("wordlist.json",function(data){
+      var res = data;
+      var result = res.indexOf(word);
+      if(result == -1){
+        var r = confirm("Word is not on list\n\nClick OK to send to teacher");
+        if(r == true){
+            sendToTeach(word);
+          } else {
+          alert ("Cancelled")
+        }
+      } else {
+//        alert(result);
+        sendWord(username, word);
+      }
+    });
+  }
+
+  $.getJSON("wordlist.json",function(data){
+    var res = data;
+    $("#search").autocomplete({ 
+      source: res,
+      minLength: 3,
+      delay: 0
+
+    });
+  });
+
+
+  function word(){
+    var input = $( "#search" ).val();
+//    console.log(input);
+    isListed(input)
+  }
+
+  function loadTable(){
+    $( "#name-here" ).text(username);
+    $.post("fetchmywords.php", {username}, function(data){
+//      console.log(data);
+      if(data){
+      var wlist = $.parseJSON(data);
+      wlist.sort();
+        var count = parseInt(wlist.length/7) + 1;
+        var table = '<table>';
+        for(i=0; i<count; i++){
+          table += '<tr>';
+            for(j=0; j<7; j++){
+              if(wlist.length==0){
+                break;
+              } else {                
+              table += '<td>' + wlist.shift() + '</td>';
+              }
+            }
+          table += '</tr>';
+        }
+        table += '</table>';
+        $( '#table-here' ).append(table);
+      } else {
+        $('#table-here').append("<p style='color: #ffaa71'>No words added yet</p>");
+      }
+    });
+  }
+  
+  $(document).ready(function(){
+    loadTable();
+  });
+</script>
+</head>
+<body>
+  <div class="box">
+      <div class="container-1">
+        <form action="javascript:word()">
+          <span class="icon"><i class="icon-search"></i></span>
+          <input type="search" id="search" placeholder="Add..." />
+        </form>
+      </div>
+  </div>
+
+  <div>
+    <h1>Wordlist for <span id="name-here"></span></h1>
+    <div id="table-here"></div>
+  </div>
+</body>
+</html>

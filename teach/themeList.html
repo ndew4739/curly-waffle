@@ -1,0 +1,99 @@
+<html>
+<head>
+  <link rel="stylesheet" href="style.css?v=7.1">
+  <script src="jquery-1.11.3.min.js"></script>
+  <script src="jquery-ui.min.js"></script>
+  <script>
+  	$(document).ready(function(){
+
+  		function getBack(){
+  			$('#addList').remove();
+  			$('#existingLists').show();
+  			$('#new-list').show();
+  			$('.addSubmit').hide();
+  		}
+
+  		$.getJSON("checksession.php", function(data) {
+    		console.log(data);
+    		$('#username').text(data.username);
+    		$('#myClass').text(data.class)
+      	})
+      	.fail(function(data) {
+    	$("#login-section").load("teacher-login.html");
+    	});
+
+  		var formHead = '<form id="addList" action="addList.php" method="post"><table id="addTable"><th id="title" colspan="2">List Title:<input type="text" id="titleText" placeholder = "Title"></th></table></form>'
+  		var listForm = '<tr><td><input class="data-row" type="text"></td><td><input class="delete" type="button" value="delete"></td></tr>';
+  		$('#new-list').off().on( 'click', function(){
+  			$('#existingLists').hide();
+  			$('#new-list').hide();
+  			$('.addSubmit').show();
+  			$('#addCont').append(formHead);
+  			for(i=0;i<5;i++){
+  				$('#addTable').append(listForm);
+  			};
+  		});
+  		$('#add-word').off().on( 'click', function(){
+  			$('#addTable').append(listForm);
+  		});
+  		$('#cancel-list').off().on('click', function(){
+  			getBack();
+  		});
+  		$('#submit-list').off().on('click', function(){
+  			if($('#titleText').val() != ''){
+  				var storeList = {};
+  				storeList.username = $('#username').text();
+  				storeList.class = $('#myClass').text();
+  				var array = [];
+  				var title = $('#titleText').val();
+  				storeList.title = title;
+  				$('.data-row').each(function(){
+  					if($(this).val() != ''){
+  						var f = $(this).val();
+  						array.push(f);
+  					} else {
+  						return false;
+  					}
+  				})
+  				storeList.words = array;
+   				console.log(storeList);
+   				var themeList = JSON.stringify(storeList);
+   				console.log(themeList);
+   				$.post("listSubmit.php", themeList, function(data){
+			    })
+    			.fail(function(){
+    	  			alert("Error storing list. Contact administrator.")
+    			})
+    			.done(function(data){
+        			console.log(data);
+        			getBack();
+			    })
+  			} else {
+  				alert("No title");
+  			}
+  		});
+  	});
+  </script>
+</head>
+<body>
+	<div id="addCont">
+    <button id="new-list" class="modButtons">+ New List</button>
+  </div>
+  <div id="contAdd">
+  	<button id="add-word" class="addSubmit">+ Add Word</button>
+    <button id="submit-list" class="addSubmit">Submit</button>
+    <button id="cancel-list" class="addSubmit">Cancel</button>
+  </div>
+	<div id="existingLists">
+
+	</div>
+	<div id="teacher" style="display: none">
+		<table>
+			<tr><td id="username"></td></tr>
+			<tr><td id="myClass"></td></tr>
+		</table>
+	</div>
+</body>
+</html>
+</body>
+</html>

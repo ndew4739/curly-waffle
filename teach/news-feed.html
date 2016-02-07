@@ -1,0 +1,54 @@
+<html>
+<head>
+<link rel="stylesheet" href="style.css?v=4">
+<script src="jquery-1.11.3.min.js"></script>
+<script src="jquery-ui.min.js"></script>
+<script>
+	var number = 0;
+	function update(){ 
+		var send = JSON.stringify({'number': number})
+
+		$.post("get-msg.php", send, function(data){
+			console.log(data);
+			if(data != "empty"){
+				var msg = $.parseJSON(data);
+//				console.log(data);
+				console.log(msg);
+				number = msg[0].id
+//				console.log(lastCall)
+				for(i=(msg.length-1); i>(-1); i--){
+				console.log(msg[i]);
+					switch(msg[i].code){
+						case '1':
+						case '2':
+						case '3': 
+							$('#main-feed').prepend('<p class="alert"><a href="#">' + msg[i].username + '</a><br/><br/>Unknown word: ' + msg[i].comments);
+							break;
+						default:
+							$('#main-feed').prepend('<p class="alert">' + msg[i].username + '<br/>Cannot read message');
+					}
+				}
+//			console.log(msg);
+	    	}
+	  	})
+	}
+	$(document).ready(function(){
+		var lastCall = 0;
+		
+	    $.getJSON("checksession.php", function(data){
+	    	$("#classname").text(data.class);
+	    });
+	    update();
+	    clearInterval(timerRef);
+	    var timerRef = setInterval( "update()", 100000);
+//		update();
+  	});
+</script>
+</head>
+<body>
+<div class="news-title">
+	<h1>News Feed for <span id="classname"></span></h1>
+</div>
+<div class="news-feed" id="main-feed"></div>
+</body>
+</html>

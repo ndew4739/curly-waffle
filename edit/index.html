@@ -1,0 +1,53 @@
+<html>
+<head>
+  <link rel="stylesheet" href="style.css">
+  <script src="jquery-1.11.3.min.js"></script>
+  <script src="jquery-ui.min.js"></script>
+  <script>
+
+    $.getJSON("checksession.php", function(data) {
+      $( '#user-name' ).text(data.username);
+    }).fail(function(data) {
+      window.location = "main-login.html";
+    });
+
+  	$(document).ready(function(){
+  		$("#sight-words").click(function(){
+	 		$("#main-section").load('sight-words.html');
+	 	})
+ 		$("#my-words").click(function(){
+  	 	$("#main-section").load('my-words.html');
+	 	})
+    $("#searchThis").click(function(){
+      $("#main-section").load('search.html');
+    })
+    $("#theme-words").off().on( "click", function(){
+      $("#main-section").load('theme-words.html');
+    })
+  	});
+//    document.getElementById("main-section").innerHTML="hi";
+  </script>
+</head>
+<body id="main-page">
+<div id="container">
+<div id="tab-bar">
+	<ul id="left-side">
+		<li><a id="home" href="#">Home</a>
+		<li><a id="sight-words" href="#">Sight Words</a></li>
+		<li><a id="my-words" href="#">My Words</a></li>
+		<li><a id="theme-words" href="#">Theme List</a></li>
+		<li><a id="searchThis" href="#">Search</a></li>
+	</ul>
+    <ul id="right-side">
+    	<li id="user-name"></li>
+      <li><a href="../index.html">Title</a></li>
+    	<li><a href="logout.php">Logout</a></li>
+    </ul>
+</div>
+<div id="main-section"></div>
+</div>
+<script>
+console.log("wassuup");
+</script>
+</body>
+</html>
