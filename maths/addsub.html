@@ -1,0 +1,270 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8">
+    <title>+/-</title> 
+    <link rel="stylesheet" type="text/css" href="gridcss.css">
+    <script src="JQuery.js"></script>
+    <script src="jquery-ui.js"></script>
+    <script>
+     
+    $(document).ready(function(){
+        $.getJSON("getstats.php", function(data) {
+            var pkg = {username: data.username, level: data.level, levelup: false, ttime:0, newBest: false};
+            $('#user-name').text(pkg.username)
+            $('#level').text('Level: ' + pkg.level)
+//               console.log(data);
+            var startTime = 0;
+            var finTime = 0;
+
+            // todo: save data locally for offline mode
+            var sumArray = [];
+            var currentObj = {};
+            var errorCount = 0;
+            var totalTime = 0;
+
+
+            function secToTime(totalSeconds){
+                var minutes = parseInt(totalSeconds/60) % 60;
+                var seconds = totalSeconds % 60;
+                var time = (minutes < 10 ? "0" + minutes : minutes) + ":" + (seconds < 10 ? "0" + seconds : seconds);
+                return time;
+            }
+
+            Array.prototype.shuffle = function() {
+                var input = this;     
+                for (var i = input.length-1; i >=0; i--) {     
+                    var randomIndex = Math.floor(Math.random()*(i+1)); 
+                    var itemAtIndex = input[randomIndex]; 
+                    input[randomIndex] = input[i]; 
+                    input[i] = itemAtIndex;
+                }
+                return input;
+            }
+
+            switch(data.level){
+                case '1':
+                    for(i=0;i<10;i++){
+                        var x = {};
+                        easyAdd2(x);
+                        sumArray.push(x);
+                    }
+                    break;
+                case '2':
+                    for(i=0;i<10;i++){
+                        var x = {};
+                        easySub2(x);
+                        sumArray.push(x);
+                    }
+                    break;
+                case '3':
+                    for(i=0;i<5;i++){
+                        var x = {};
+                        easyAdd2(x);
+                        sumArray.push(x);
+                    }
+                    for(i=0;i<5;i++){
+                        var x = {};
+                        easySub2(x);
+                        sumArray.push(x);
+                    }
+                    break;
+                case '4':
+                    for(i=0;i<10;i++){
+                        var x = {};
+                        hardAdd2(x);
+                        sumArray.push(x);
+                    }
+                    break;
+                 case '5':
+                    for(i=0;i<10;i++){
+                        var x = {};
+                        hardSub2(x);
+                        sumArray.push(x);
+                    }
+                    break;
+                case '6':
+                    for(i=0;i<5;i++){
+                        var x = {};
+                        hardAdd2(x);
+                        sumArray.push(x);
+                    }
+                    for(i=0;i<5;i++){
+                        var x = {};
+                        hardSub2(x);
+                        sumArray.push(x);
+                    }
+                    break;
+                default:
+                    console.log("not ready");
+            }
+            sumArray.shuffle();
+//            console.log(sumArray.length);
+
+            function easyAdd2(obj){
+                obj.dig1 = Math.floor(Math.random() * 10)
+                obj.dig2 = Math.floor(Math.random() * 10)
+                obj.dig3 = Math.floor(Math.random() * 10)
+                obj.dig4 = Math.floor(Math.random() * 10)
+                if(obj.dig1 + obj.dig3 >= 10 || obj.dig2 + obj.dig4 >= 10 || obj.dig1 == 0 || obj.dig3 == 0){
+                    easyAdd2(obj)
+                } else {
+                    obj.num1 = Number(obj.dig1.toString()+obj.dig2.toString());
+                    obj.num2 = Number(obj.dig3.toString()+obj.dig4.toString());
+                    obj.total = obj.num1+obj.num2;
+                    obj.strSum = obj.num1.toString() + " + " + obj.num2.toString() + " = ";
+                    return(obj);
+                }
+            }
+
+            function hardAdd2(obj){
+                obj.dig1 = Math.floor(Math.random() * 10)
+                obj.dig2 = Math.floor(Math.random() * 10)
+                obj.dig3 = Math.floor(Math.random() * 10)
+                obj.dig4 = Math.floor(Math.random() * 10)
+                if(obj.dig1 + obj.dig3 < 10 && obj.dig2 + obj.dig4 < 10 || obj.dig1 == 0 || obj.dig3 == 0){
+                    hardAdd2(obj)
+                } else {
+                    obj.num1 = Number(obj.dig1.toString()+obj.dig2.toString());
+                    obj.num2 = Number(obj.dig3.toString()+obj.dig4.toString());
+                    obj.total = obj.num1+obj.num2;
+                    obj.strSum = obj.num1.toString() + " + " + obj.num2.toString() + " = ";
+                    return(obj);
+                }
+            }
+
+            function easySub2(obj){
+                obj.dig1 = Math.floor(Math.random() * 10)
+                obj.dig2 = Math.floor(Math.random() * 10)
+                obj.dig3 = Math.floor(Math.random() * 10)
+                obj.dig4 = Math.floor(Math.random() * 10)
+                if(obj.dig1 - obj.dig3 < 0 || obj.dig2 - obj.dig4 < 0 || obj.dig1 == 0 || obj.dig3 == 0){
+                    easySub2(obj)
+                } else {
+                    obj.num1 = Number(obj.dig1.toString()+obj.dig2.toString());
+                    obj.num2 = Number(obj.dig3.toString()+obj.dig4.toString());
+                    obj.total = obj.num1-obj.num2;
+                    obj.strSum = obj.num1.toString() + " - " + obj.num2.toString() + " = ";
+                    return(obj);
+                }
+            }
+
+            function hardSub2(obj){
+                obj.dig1 = Math.floor(Math.random() * 10)
+                obj.dig2 = Math.floor(Math.random() * 10)
+                obj.dig3 = Math.floor(Math.random() * 10)
+                obj.dig4 = Math.floor(Math.random() * 10)
+                if(obj.dig1 - obj.dig3 <= 0 || obj.dig2 - obj.dig4 >= 0 || obj.dig1 == 0 || obj.dig3 == 0){
+                    hardSub2(obj)
+                } else {
+                    obj.num1 = Number(obj.dig1.toString()+obj.dig2.toString());
+                    obj.num2 = Number(obj.dig3.toString()+obj.dig4.toString());
+                    obj.total = obj.num1-obj.num2;
+                    obj.strSum = obj.num1.toString() + " - " + obj.num2.toString() + " = ";
+                    return(obj);
+                }
+            }
+
+/*
+            sumArray = []
+            for(i=0;i<10;i++){
+                var x = {};
+                hardSub2(x);
+                sumArray.push(x);
+//                console.log(x.strSum);
+            }*/
+
+            function showSum(das){
+                if (das.length > 0) {
+
+                    currentObj = das.pop();
+                    $('#here').text(currentObj.strSum);
+                    $('#guessInput').focus();
+//                  cheat function
+//                    $('#guessInput').val(currentObj.total);
+                } else {
+                    finish();
+                }
+            }
+
+            function finish(){
+
+                $('#here').text("Finished");
+                $('#guessInput').remove();
+                $('#replay').show();
+                var d = new Date();
+                finTime = d.getTime();
+                var numBat = (finTime - startTime);
+                totalTime = Math.round((numBat + 0.00001) * 100)/ 100000;
+                $('#time').text('Time: ' + totalTime);
+                if (errorCount == 0 && totalTime <= 300){
+                    $('#accuracy').text("Accuracy: 100%!!").show();
+                    pkg.level++;
+                    pkg.ttime = totalTime;
+                    pkg.levelup = true;
+                    if(totalTime < pkg.bestTime || pkg.bestTime == null){
+                        pkg.newBest = true;
+                    }
+                    var sendPkg = JSON.stringify(pkg);
+                    $.post("addsubprocess.php",
+                    sendPkg,
+                    function(response){
+                        //var returnJSON = JSON.parse(response);
+                        console.log(response);
+                    });//post
+                } else {
+                    c = Math.round((10/(errorCount + 10))*100);
+                    $('#accuracy').text("Your accuracy: " + c + "%. You need to score 100% to get to the next level.").show();
+                }
+            }
+
+            $('#go').click(function(){
+                $('#go').remove();
+                $('#guessInput').show().focus();
+                showSum(sumArray);
+                var d = new Date();
+                startTime = d.getTime();
+            })
+
+            $('#checkAns').submit(function( event ){
+                event.preventDefault();
+                b = $('#guessInput').val();
+                if(b == currentObj.total){
+//                    console.log("correct!")
+                    $('#guessInput').val("");
+                    showSum(sumArray);
+                } else {
+                    $('#guessInput').val("");
+                    errorCount++;
+                }
+//                console.log(b);
+            });
+
+        }).fail(function(data) {
+            window.location = "main_login.html";
+        });
+    });
+    </script>
+</head>
+<body style="color:black">
+    <div>
+        <p id="user-name"></p>
+        <p id="level"></p>
+    </div>
+    <button id="go" style="height:50px;width:100px;margin:50px">GO!</button>
+    <div id="answer-form">
+        <form id="checkAns" action="no-exist.php">
+            <div class="input-group">
+                <p id="here" style="color:black"></p>
+            </div>
+            <div class="input-group">
+                <input type="number" id="guessInput" size = 4 style="display:none" autocomplete="off" class="form-control"/>
+            </div>
+        </form>
+    </div>
+    <div style="display:none" id="accuracy"></div>
+    <div style="display:none" id="time"></div>
+    <a id="replay" style="display:none" href = "addsub.html">REPLAY</a>
+    <a id="home" href = "../maths">HOME</a>
+</body>
+</html>

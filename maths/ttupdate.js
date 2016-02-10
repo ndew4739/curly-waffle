@@ -177,7 +177,7 @@ function locate(){
     var d = new Date();
     startTime = d.getTime();
 //    cheat function:
-    document.getElementById("guessInput").value = ob.ans;
+//    document.getElementById("guessInput").value = ob.ans;
 }
 
 function checkAns() {

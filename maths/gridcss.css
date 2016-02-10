@@ -135,3 +135,14 @@ table td, th {
     font-size: 32px;
     color: white
 }
+#accuracy{
+    color:black;
+}
+
+#replay{
+    color:blue;
+    margin-right:50px;
+}
+#home{
+    color:blue;
+}
