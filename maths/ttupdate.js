@@ -10,7 +10,7 @@ var ob;
 var startTime;
 var finTime;
 var totalTime;
-
+var username = $('#user-name').text();
 var timeArray = {
 bestTime: 0,
 error: 0,
@@ -23,6 +23,16 @@ var control2 = [2,4,6,8,10,12,1,3,5,7,9,11];
 var yearThree = [1,2,3,5,10];
 var yearFour = [1,2,3,4,5,6,7,8,9,10,11,12];
 var ttList;
+
+  function sendToTeach(comment, code){
+    var obj = {'username': username, 'title': 'student', 'comment': comment, 'code':code};
+    var sent = JSON.stringify(obj);
+//    console.log(sent);
+    $.post('log-message.php', sent, function(data){
+//      alert(data);
+      //alert("Message sent");
+    });
+  }
 
 Array.prototype.shuffle = function() {
     var input = this;     
@@ -94,7 +104,8 @@ function displayTarget(ttLevel){
 
 function secToTime(totalSeconds){
 var minutes = parseInt(totalSeconds/60) % 60;
-var seconds = totalSeconds % 60;
+var x = totalSeconds % 60;
+var seconds = x.toFixed(2);
 var time = (minutes < 10 ? "0" + minutes : minutes) + ":" + (seconds < 10 ? "0" + seconds : seconds);
 return time;
 }
@@ -177,7 +188,7 @@ function locate(){
     var d = new Date();
     startTime = d.getTime();
 //    cheat function:
-//    document.getElementById("guessInput").value = ob.ans;
+    document.getElementById("guessInput").value = ob.ans;
 }
 
 function checkAns() {
@@ -232,9 +243,11 @@ function finish(){
         alert("New Level: " + returnJSON.newLevel + "!!");
         $("#level").text(returnJSON.newLevel);
         $("#best-time").text(returnJSON.totalTime);
+        sendToTeach(returnJSON.newLevel, 2);
     } else if (returnJSON.bestTime){
         alert("New Best Time: " + returnJSON.totalTime + "!!!");
         $("#best-time").text(returnJSON.totalTime);
+        sendToTeach(returnJSON.totalTime, 1);
     }
     $("#this-time").text(returnJSON.totalTime);
     $("#accuracy").text(returnJSON.accuracy);

@@ -20,7 +20,11 @@
 				console.log(msg[i]);
 					switch(msg[i].code){
 						case '1':
+							$('#main-feed').prepend('<p class="alert"><a href="#">' + msg[i].username + '</a><br/><br/>New best time (timestables): ' + msg[i].comments);
+							break;
 						case '2':
+							$('#main-feed').prepend('<p class="alert"><a href="#">' + msg[i].username + '</a><br/><br/>New level (timestables): ' + msg[i].comments);
+							break;
 						case '3': 
 							$('#main-feed').prepend('<p class="alert"><a href="#">' + msg[i].username + '</a><br/><br/>Unknown word: ' + msg[i].comments);
 							break;
@@ -40,7 +44,7 @@
 	    });
 	    update();
 	    clearInterval(timerRef);
-	    var timerRef = setInterval( "update()", 100000);
+	    var timerRef = setInterval( "update()", 10000);
 //		update();
   	});
 </script>
