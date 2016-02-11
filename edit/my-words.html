@@ -24,7 +24,8 @@
     var obj = {'username': username, 'title': 'student', 'comment': word, 'code':3};
     var sent = JSON.stringify(obj);
     $.post('log-message.php', sent, function(data){
-      console.log(data);
+      alert(data);
+      $('#search').val('');
       //alert("Message sent");
     });
   }

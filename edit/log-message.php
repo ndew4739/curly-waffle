@@ -29,7 +29,7 @@ if(!$result = $db->query($sql)){
 
 $db->close();
 
-echo "success";
+echo "Message was sent to teacher";
 
 //get class
 //get data
