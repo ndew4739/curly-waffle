@@ -5,12 +5,13 @@ if(!$_SESSION['user_login_status']==1){
 } else {
 	$arr = array (
 		'username'=>$_SESSION['username'],
-		'Sid'=>$_SESSION['Sid'],
-		'ttLevel'=>$_SESSION['ttlevel'],
-		'divLevel'=>$_SESSION['divlevel'],
-		'ttBestTime'=>$_SESSION['ttBestTime']
+		'password'=>$_SESSION['password'],
+		'first_name'=>$_SESSION['first_name'],
+		'last_name'=>$_SESSION['last_name'],
+		'title'=>$_SESSION['title'],
+		'class'=>$_SESSION['class']
 	);
 
 	echo json_encode($arr);
 }
-?>
+?> 
