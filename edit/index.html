@@ -5,10 +5,10 @@
   <script src="jquery-ui.min.js"></script>
   <script>
 
-    $.getJSON("checksession.php", function(data) {
+    $.getJSON("../checksession.php", function(data) {
       $( '#user-name' ).text(data.username);
     }).fail(function(data) {
-      window.location = "main-login.html";
+      window.location = "../main_login.html";
     });
 
   	$(document).ready(function(){

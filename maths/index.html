@@ -7,12 +7,12 @@
     <script>
 
     // check user session
-    $.getJSON("checksession.php", function(data) {
+    $.getJSON("../checksession.php", function(data) {
       $( '#user-name' ).text(data.username);
       // todo: save data locally for offline mode
 
     }).fail(function(data) {
-      window.location = "main_login.html";
+      window.location = "../main_login.html";
     });
 
     $(document).ready(function() {
@@ -68,9 +68,12 @@
         <a href="#" id="tPractice"><li>Target Practice</li></a>
         <a href="#" id="setTarg"><li>Set Target</li></a>
         <a href="addsub.html" id="addsub"><li>Addition and Subtraction</li></a>
-        <a href="#"><li>Division</li></a>
-        <a href="#"><li>Doubles</li></a>
-        <a href="#"><li>Halving</li></a>
+        <a href="time.html" id="time"><li>Time</li></a>
+        <a href="time2.html"><li>Time 2</li></a>
+        <a href="time3.html"><li>Time 3</li></a>
+        <a href="time4.html"><li>Time 4</li></a>
+        <a href="time5.html"><li>Time 5</li></a>
+
       </ul>
     </div>
     <div id="load-here"></div>

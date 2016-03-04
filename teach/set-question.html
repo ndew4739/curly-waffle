@@ -1,0 +1,42 @@
+<html>
+<head>
+  <link rel="stylesheet" href="style.css?v=4">
+  <script src="jquery-1.11.3.min.js"></script>
+  <script src="jquery-ui.min.js"></script>
+  <script>
+   	$.getJSON("checksession.php", function(data) {
+      	$( '#user-name' ).text(data.title + " " + data.last_name);
+      	var obj = {'username': data.username};
+      	console.log(data);
+      	$.post("lastQ.php", obj, function(response) {
+          var x=JSON.parse(response)
+          console.log(x);
+          var y = x.incomplete.length;
+          for(i=0;i<y;i++){
+            if(x.incomplete[i].live === "1"){
+              window.location = "liveForm.html";
+            } else {
+              console.log(x.incomplete[i].question);
+            }
+          }
+        	if(!response){
+            console.log("false");
+        		$('#qNum').val('0');
+        	}
+        })
+    }).fail(function(data) {
+       window.location = "main-login.html";
+    });
+    </script>
+</head>
+<body>
+	<div>
+		<form id="liveQ" action="setQ.php" method="post">
+			<h1>Set Question</h1>
+      <div style="margin-left:200px">
+			<label for "question">Enter Question below</label><br>
+			<input type="text" id="question" name="question"><br>
+			<input type="submit">
+    </div>
+			</form>
+	</div>

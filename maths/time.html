@@ -1,0 +1,165 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8">
+    <title>converting time</title> 
+    <link rel="stylesheet" type="text/css" href="gridcss.css">
+    <script src="JQuery.js"></script>
+    <script src="jquery-ui.js"></script>
+    <script>
+
+
+        $(document).ready(function(){
+
+        $.getJSON("../checksession.php", function(data) {
+            $('#user-name').text(data.username);
+            // todo: save data locally for offline mode
+        }).fail(function(data) {
+            window.location = "../main_login.html";
+        });
+
+            function sendToTeach(comment, code){
+                var username = $('#user-name').text();
+                var object = {'username': username, 'title': 'student', 'comment': comment, 'code':code};
+                var sent = JSON.stringify(object);
+                //    console.log(sent);
+                $.post('log-message.php', sent, function(data){
+                    alert("You're on FIRE!!!!");
+      //alert("Message sent");
+                });
+            }
+            var obj;
+            var display;
+            var answer;
+            var correct = 0;
+            var timeArr = [];
+
+//            for(i=0;i<20;i++){
+            function getTimes(){
+                var obj={};
+                obj.hour=Math.floor(Math.random() * 23);
+                obj.minute=Math.floor(Math.random() * 59);
+                if(obj.minute<10){
+                    obj.minute = "0"+obj.minute.toString();
+                }else{
+                    obj.minute = obj.minute.toString();
+                }
+                if(obj.hour <= 11 && obj.hour > 0){
+                    obj.twelveHour = obj.hour.toString();
+                    obj.pm = "am"
+                    if(obj.hour < 10){
+                        obj.hour = "0"+obj.hour.toString();
+                    } else {
+                        obj.hour = obj.hour.toString();
+                    }
+                } else if(obj.hour == 0){
+                    obj.pm = "am";
+                    obj.hour = "0" + obj.hour.toString();
+                    obj.twelveHour = (12).toString();
+                } else if(obj.hour === 12) {
+                    obj.pm = "pm";
+                    obj.hour = (12).toString();
+                    obj.twelveHour = obj.hour.toString();
+                } else   {
+                    obj.pm = "pm";
+                    obj.twelveHour = (obj.hour-12).toString();
+                    obj.hour = obj.hour.toString();
+                }
+                obj.tfhTime = obj.hour + obj.minute;
+                obj.thTime = obj.twelveHour + ":" + obj.minute + obj.pm;
+//                timeArr.push(obj)
+                console.log(obj.thTime + "--->" + obj.tfhTime);
+                return obj;
+//            }
+            }
+
+            function showSum(){
+                if (correct < 5) {
+                    currentObj = getTimes();
+                    question=Math.floor(Math.random() * 2);
+                    console.log(question);
+                    if (question === 0){
+                        display = currentObj.thTime;
+                        answer = currentObj.tfhTime;
+                    } else {
+                        display = currentObj.tfhTime;
+                        answer = currentObj.thTime;
+                    }
+                    $('#here').text(display);
+                    $('#guessInput').focus();
+//                  cheat function
+//                    $('#guessInput').val(currentObj.total);
+                } else {
+                    finish();
+                }
+            }
+
+            function finish(){
+                sendToTeach('5 streak', 4);
+                correct = 0;
+                showSum();
+            }
+
+            $('#go').click(function(){
+                $('#go').remove();
+                $('#guessInput').show().focus();
+                showSum();
+            });
+
+            $('#seeErr').click(function(e){
+                event.preventDefault();
+                $('#answer-form').css('border', '2px black solid');
+                $('#seeErr').hide();
+                $('#accuracy').text('');
+                $('#guessInput').show().focus();
+                showSum();
+            })
+
+            $('#checkAns').submit(function( event ){
+                event.preventDefault();
+                b = $('#guessInput').val();
+                if(b === answer){
+                    console.log("correct!")
+                    $('#guessInput').val("");
+                    $('#answer-form').css("border", "10px solid green");
+                    showSum();
+                    correct++
+                } else {
+                    $('#seeErr').show();
+                    $('#guessInput').val("").hide();
+                    correct = 0;
+                    $('#accuracy').text("Correct answer: " + display + "-------->" + answer).show();
+                    $('#answer-form').css("border", "10px solid red");
+                }
+//                console.log(b);
+            });
+
+
+
+        });
+    </script>
+<body style="color:black">
+    <div>
+        <p id="user-name"></p>
+        <p id="level"></p>
+    </div>
+    <button id="go" style="height:50px;width:100px;margin:50px">GO!</button>
+    <div id="answer-form" style="border:2px black solid; padding: 10px">
+        <form id="checkAns" action="no-exist.php">
+            <div class="input-group">
+                <p id="here" style="color:black"></p>
+            </div>
+            <div class="input-group">
+                <input type="text" id="guessInput" style="display:none; width:100px" autocomplete="off" class="form-control"/>
+
+            </div>
+
+        </form>
+                <button id="seeErr" style="display:none">Okay</button>
+    </div>
+    <div><h1 style="display:none" id="accuracy">Correct answer:</h1></div>
+    <div style="display:none" id="time"></div>
+    <a id="replay" style="display:none" href = "addsub.html">REPLAY</a>
+    <a id="home" href = "../maths">HOME</a>
+</body>
+</html>

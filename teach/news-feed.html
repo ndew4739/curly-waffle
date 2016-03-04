@@ -28,6 +28,18 @@
 						case '3': 
 							$('#main-feed').prepend('<p class="alert"><a href="#">' + msg[i].username + '</a><br/><br/>Unknown word: ' + msg[i].comments);
 							break;
+						case '4':
+							$('#main-feed').prepend('<p class="alert"><a href="#">' + msg[i].username + '</a><br/><br/>Converting time (time 1): ' + msg[i].comments);
+							break;
+						case '5':
+							$('#main-feed').prepend('<p class="alert"><a href="#">' + msg[i].username + '</a><br/><br/>Time 2, Adding and subtracting hours (24hr time, no converting): ' + msg[i].comments);
+							break;	
+						case '6':
+							$('#main-feed').prepend('<p class="alert"><a href="#">' + msg[i].username + '</a><br/><br/>Time 3, Adding and subtracting hours (24hr time, no converting): ' + msg[i].comments);	
+								break;			
+						case '7':
+							$('#main-feed').prepend('<p class="alert"><a href="#">' + msg[i].username + '</a><br/><br/>Time 3, Adding and subtracting hours (24hr time, hours and minutes(10)): ' + msg[i].comments);	
+								break;			
 						default:
 							$('#main-feed').prepend('<p class="alert">' + msg[i].username + '<br/>Cannot read message');
 					}

@@ -1,0 +1,101 @@
+<html>
+<head>
+  <link rel="stylesheet" href="style.css?v=4">
+  <script src="jquery-1.11.3.min.js"></script>
+  <script src="jquery-ui.min.js"></script>
+  <script>
+$(document).ready(function(){
+
+  	$.getJSON("checkquestion.php", function(data) {
+      	$( '#user-name' ).text(data.title + " " + data.last_name);
+      	if(!data.question){
+      		$('#question').text(data.msg);
+      	} else {
+      		$('#lastCall').text('0');
+      		var lastCall = $('#lastCall').text();
+      		var obj = {'username': data.username, 'qNum': data.qNum, 'class': data.class, 'lastCall': lastCall};
+      		$('#question').text(data.question);
+      		console.log(obj);
+//			getAns(obj);
+//			setInterval( getAns(obj), 1000);
+//			console.log(obj.lastCall);
+			var live = setInterval(function(){
+				obj.lastCall = $('#lastCall').text();
+			  	$.post("get-answer.php", obj, function(response) {
+		    		if(response){
+			  		x = JSON.parse(response);
+
+		    			$('#lastCall').text(x[0].id);
+		    			console.log(obj);
+		    			console.log(x[0].id);
+		    			console.log(x);
+		      			for(i=0;i<x.length;i++){
+		        			$('#main-div').append('<div class="nameTag present" style="border-radius:5px; margin: 10px 10px 10px 10px; position:relative; height:150px;width:200px;text-align:center; display:inline-block" data-sid='+x[i].username+'><div style="position: absolute; margin: 5px; overflow:scroll; text-overflow:ellipsis; height: 140px; width: 185px; font-size: 18px; text-align: centre">'+x[i].answer+'</div></div>');
+		        		}
+		        		$('.nameTag').on('click', function(){
+		    				if ($(this).hasClass('present')){
+		    					$(this).removeClass('present');
+		    					$(this).addClass('absent');
+		    				} else if ($(this).hasClass('absent')) {
+		    					$(this).removeClass('absent');
+		    					$(this).addClass('present');
+		    				};
+	    				})
+					} else {
+			    		console.log("empty");
+		    		}
+
+    		
+		    	});
+			},1000);
+
+			function myStopFunction() {
+    			clearInterval(live);
+			}
+
+	
+
+			    $('#stop').click(function(){
+			    	myStopFunction();
+			    	$('#stop').remove();
+			    	$('#removeMsg').text('Click answers to assess as correct or leave session');
+			    	$('#assess').show();
+			    	$('#leave').show();
+
+				});
+				$('#assess').on('click', function(){
+					$('.absent').each(function(){
+						console.log($(this).attr('data-sid'))
+					})
+				})
+				$('#remove').click(function(){
+					$('.absent').remove();
+				})
+				$('#leave').click(function(){
+					r = confirm ('End live session for this question?');
+					if(r == true){
+						$.post('leave.php', data, function() {
+						}).done(function(){
+							window.location = "set-question.html"
+						}).fail(function(data2){
+							console.log(data2);
+						});
+					} else {
+						console.log("cancelled");
+					}
+				});
+		}
+	});
+});  
+  </script>
+</head>
+<body>
+	<div><p id="user-name"></p></div>
+	<div><h1 id="question"></h1></div>
+	<div id="main-div"></div>
+	<div id="lastCall"></div>
+	<div id="low-bar"><div id="removeMsg"><p>Press end to stop accepting responses</p></div><button class="but" id="stop">End</button><button class="but" id="leave" style="display:none">Leave</button><button class="but" id="assess" style="display:none">Assess</button></div>
+
+	
+</body>
+</html>

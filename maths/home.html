@@ -9,11 +9,11 @@
 <script>
 
 // check user session
-$.getJSON("checksession.php", function(data) {
+$.getJSON("../checksession.php", function(data) {
 	console.log(data);
     // todo: save data locally for offline mode
     }).fail(function(data) {
-      window.location = "main_login.html";
+      window.location = "../main_login.html";
     });
 
 $(document).ready(function(e) {

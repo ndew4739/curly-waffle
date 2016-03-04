@@ -95,11 +95,102 @@
                         sumArray.push(x);
                     }
                     break;
+                case '7':
+                    for(i=0;i<20;i++){
+                        var f = Math.floor(Math.random() * 4);
+                        switch(f){
+                            case 0:
+                                console.log("0 gathered");
+                                var x = {};
+                                easyAdd2(x);
+                                sumArray.push(x);
+                                break;
+                            case 1:
+                                var x = {};
+                                easySub2(x);
+                                sumArray.push(x);
+                                break;
+                            case 2:
+                                var x = {};
+                                hardAdd2(x);
+                                sumArray.push(x);
+                                break;
+                            case 3:
+                                var x = {};
+                                hardSub2(x);
+                                sumArray.push(x);
+                                break;
+                        }
+                    }
+                    break;
+
+                case '8':
+                    for(i=0;i<10;i++){
+                        var x = {};
+                        easyAdd3(x);
+                        sumArray.push(x);
+                    }
+                    break;
+
+                case '9':
+                    for(i=0;i<10;i++){
+                        var x = {};
+                        easySub3(x);
+                        sumArray.push(x);
+                    }
+                    break;
+
+                case '10':
+                    for(i=0;i<10;i++){
+                        var x = {};
+                        hardAdd3(x);
+                        sumArray.push(x);
+                    }
+                    break;                    
+
+                case '11':
+                    for(i=0;i<10;i++){
+                        var x = {};
+                        hardSub3(x);
+                        sumArray.push(x);
+                    }
+                    break;                    
+
+
+                case '12':
+                    for(i=0;i<10;i++){
+                        var f = Math.floor(Math.random() * 4);
+                        switch(f){
+                            case 0:
+                                var x = {};
+                                easyAdd3(x);
+                                sumArray.push(x);
+                                break;
+                            case 1:
+                                var x = {};
+                                easySub3(x);
+                                sumArray.push(x);
+                                break;
+                            case 2:
+                                var x = {};
+                                hardAdd3(x);
+                                sumArray.push(x);
+                                break;
+                            case 3:
+                                var x = {};
+                                hardSub3(x);
+                                sumArray.push(x);
+                                break;
+                        }
+                    }
+                    break;
+
                 default:
                     console.log("not ready");
             }
+
             sumArray.shuffle();
-//            console.log(sumArray.length);
+            console.log(sumArray.length);
 
             function easyAdd2(obj){
                 obj.dig1 = Math.floor(Math.random() * 10)
@@ -164,6 +255,82 @@
                     return(obj);
                 }
             }
+
+            function easyAdd3(obj){
+                obj.dig1 = Math.floor(Math.random() * 10)
+                obj.dig2 = Math.floor(Math.random() * 10)
+                obj.dig3 = Math.floor(Math.random() * 10)
+                obj.dig4 = Math.floor(Math.random() * 10)
+                obj.dig5 = Math.floor(Math.random() * 10)
+                obj.dig6 = Math.floor(Math.random() * 10)
+
+                if(obj.dig1 + obj.dig4 >= 10 || obj.dig2 + obj.dig5 >= 10 || obj.dig3 + obj.dig6 >= 10 ||obj.dig1 == 0 || obj.dig4 == 0){
+                    easyAdd3(obj)
+                } else {
+                    obj.num1 = Number(obj.dig1.toString()+obj.dig2.toString()+obj.dig3.toString());
+                    obj.num2 = Number(obj.dig4.toString()+obj.dig5.toString()+obj.dig6.toString());
+                    obj.total = obj.num1+obj.num2;
+                    obj.strSum = obj.num1.toString() + " + " + obj.num2.toString() + " = ";
+                    return(obj);
+                }
+            }
+
+           function hardAdd3(obj){
+                obj.dig1 = Math.floor(Math.random() * 10);
+                obj.dig2 = Math.floor(Math.random() * 10);
+                obj.dig3 = Math.floor(Math.random() * 10);
+                obj.dig4 = Math.floor(Math.random() * 10);
+                obj.dig5 = Math.floor(Math.random() * 10);
+                obj.dig6 = Math.floor(Math.random() * 10);
+
+                if(obj.dig1 + obj.dig4 < 10 && obj.dig2 + obj.dig5 < 10 && obj.dig3 + obj.dig6 < 10 ||obj.dig1 == 0 || obj.dig4 == 0){
+                    hardAdd3(obj)
+                } else {
+                    obj.num1 = Number(obj.dig1.toString()+obj.dig2.toString()+obj.dig3.toString());
+                    obj.num2 = Number(obj.dig4.toString()+obj.dig5.toString()+obj.dig6.toString());
+                    obj.total = obj.num1+obj.num2;
+                    obj.strSum = obj.num1.toString() + " + " + obj.num2.toString() + " = ";
+                    return(obj);
+                }
+            }
+
+            function easySub3(obj){
+                obj.dig1 = Math.floor(Math.random() * 10);
+                obj.dig2 = Math.floor(Math.random() * 10);
+                obj.dig3 = Math.floor(Math.random() * 10);
+                obj.dig4 = Math.floor(Math.random() * 10);
+                obj.dig5 = Math.floor(Math.random() * 10);
+                obj.dig6 = Math.floor(Math.random() * 10);
+
+                if(obj.dig1 - obj.dig4 < 0 || obj.dig2 - obj.dig5 < 0 || obj.dig3 - obj.dig6 < 0 || obj.dig1 == 0 || obj.dig4 == 0){
+                    easySub3(obj)
+                } else {
+                    obj.num1 = Number(obj.dig1.toString()+obj.dig2.toString()+obj.dig3.toString());
+                    obj.num2 = Number(obj.dig4.toString()+obj.dig5.toString()+obj.dig6.toString());
+                    obj.total = obj.num1-obj.num2;
+                    obj.strSum = obj.num1.toString() + " - " + obj.num2.toString() + " = ";
+                    return(obj);
+                }
+            }
+
+            function hardSub3(obj){
+                obj.dig1 = Math.floor(Math.random() * 10)
+                obj.dig2 = Math.floor(Math.random() * 10)
+                obj.dig3 = Math.floor(Math.random() * 10)
+                obj.dig4 = Math.floor(Math.random() * 10)
+                obj.dig5 = Math.floor(Math.random() * 10)
+                obj.dig6 = Math.floor(Math.random() * 10)
+                if(obj.dig1 - obj.dig4 <= 0 || obj.dig2 - obj.dig5 >= 0 && obj.dig3 - obj.dig6 >= 0 || obj.dig1 == 0 || obj.dig3 == 0){
+                    hardSub3(obj)
+                } else {
+                    obj.num1 = Number(obj.dig1.toString()+obj.dig2.toString()+obj.dig3.toString());
+                    obj.num2 = Number(obj.dig4.toString()+obj.dig5.toString()+obj.dig6.toString());
+                    obj.total = obj.num1-obj.num2;
+                    obj.strSum = obj.num1.toString() + " - " + obj.num2.toString() + " = ";
+                    return(obj);
+                }
+            }
+
 
 /*
             sumArray = []
@@ -241,7 +408,7 @@
             });
 
         }).fail(function(data) {
-            window.location = "main_login.html";
+            window.location = "../main_login.html";
         });
     });
     </script>
@@ -258,7 +425,7 @@
                 <p id="here" style="color:black"></p>
             </div>
             <div class="input-group">
-                <input type="number" id="guessInput" size = 4 style="display:none" autocomplete="off" class="form-control"/>
+                <input type="number" id="guessInput" style="display:none; width:100px" autocomplete="off" class="form-control"/>
             </div>
         </form>
     </div>

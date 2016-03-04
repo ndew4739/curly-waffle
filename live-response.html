@@ -1,0 +1,49 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <script src="JQuery.js"></script>
+    <script src="jquery-ui.js"></script>
+    <script>
+    $(document).ready(function(){
+	    $.getJSON("checksession.php", function(data) {
+	        $( '#user-name' ).text(data.username);
+	        console.log(data);
+	        obj = {'username': data.username, 'class': data.class}
+	        $.post("fetch-question.php", obj, function(response) {
+	        	if(response){
+	        		a = JSON.parse(response);
+	        		console.log(a);
+	      			$('#question').text(a.question);
+	      			var qNum = a.qNum;
+	      			$('#live-answer').submit(function( event ){
+						obj.qNum = qNum;
+						obj.answer = $('#text').val();
+	      				event.preventDefault();
+	      				$.post("log-answer.php", obj, function(fin){
+	      					console.log(fin);
+	      					alert("Answer submitted")
+	      					window.location = "index.html";
+	      				});
+	      			});
+	      		} else {
+	      			$('#live-answer').remove();
+	      			$('#question').text("You have no live forms at this time");
+	      		}
+	      	});
+	    }).fail(function(data) {
+	        window.location = "main_login.html";
+	    });
+    });
+    </script>
+</head>
+<body>
+	<div><p id='user-name'></p></div>
+	<div><p id='question'></p></div>
+	<div>
+		<form id="live-answer">
+			<textarea id="text"></textarea>
+			<input type="submit" action="log-answer.php">
+		</form>
+	</div>
+</body>
+</html>

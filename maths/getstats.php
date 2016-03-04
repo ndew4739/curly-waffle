@@ -2,7 +2,7 @@
 
 session_start();
 if(!$_SESSION['user_login_status']==1){
-header("Location: main_login.php");
+header("Location: ../main_login.html");
 }
 $username = $_SESSION['username'];
 
@@ -11,10 +11,10 @@ if ($mysqli->connect_errno){
 	echo "Failed to connect to MySQL: " . $mysqli->connect_error;
 }
 
-$sql = "INSERT INTO addSub (username, level)
+$sql = "INSERT INTO addsub (username, level)
 SELECT * FROM (SELECT '$username', 1) AS tmp
 WHERE NOT EXISTS (
-    SELECT username FROM addSub WHERE username = '$username'
+    SELECT username FROM addsub WHERE username = '$username'
 ) LIMIT 1";
 
 if(!$result = $mysqli->query($sql)){
