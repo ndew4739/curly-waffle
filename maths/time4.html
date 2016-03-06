@@ -70,7 +70,8 @@
             if(addSub===0){
                 obj.sum = "add";
                 obj.num = Math.floor(Math.random() * 22);
-                obj.numMin = Math.floor(Math.random() * 50);
+                var g = (Math.random() * 50)
+                obj.numMin = Math.round(g / 10)*10;
                 if(obj.num + obj.hour >= 24){
                     addSubTime(obj);
                 } else {
@@ -112,7 +113,8 @@
             } else {
                 obj.sum = "subtract";
                 obj.num = Math.floor(Math.random() * 22);
-                obj.numMin = Math.floor((Math.random() * 50);
+                var g = (Math.random() * 50)
+                obj.numMin = Math.round(g / 10)*10;
                 if(obj.hour - obj.num < 0){
                     addSubTime(obj);
                 } else {

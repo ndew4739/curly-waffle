@@ -1,0 +1,110 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8">
+    <title>Form Builder</title> 
+      <link rel="stylesheet" href="style.css?v=3">
+	<script src="jquery-1.11.3.min.js"></script>
+	<script src="jquery-ui.min.js"></script>
+    <script>
+    $(document).ready(function(){
+    	$.getJSON("checksession.php", function(data) {
+      		$( '#user-name' ).text(data.title + " " + data.last_name);
+      		console.log(data);
+    	}).fail(function(data) {
+      		$("#login-section").load("teacher-login.html");
+    	});
+    	var send = false;
+    	var call = 1;
+    	var cell = $('td')[0];
+    	$.data(cell, "qId", call);
+//    	$(".qId").text
+    	$('.qId').text($('.qId').attr('data-q-index'));
+    	$('#dailyForm').on('keydown', 'input', function(event) { 
+    		if (event.which == 13) {
+        		event.preventDefault();
+        		var currBox = $(event.target);
+        		var indexNum = parseFloat(currBox.attr('data-index'));
+        		if (currBox.hasClass('question')){
+        			console.log("question-->index: " + indexNum);
+        			$('[data-index="' + (indexNum + 1).toString() + '"]').focus();
+        		} else if (currBox.hasClass('answer')){
+        			call++
+        			console.log("answer-->index: " + indexNum);
+        			$("table").append('<tr class="dat"><td class="qId" data-q-index = "'+call+'"></td><td><input class = "question" type = "text" style="width:300px" data-index="'+(indexNum+1)+'"></td><td><input class = "answer" type = "text" data-index="'+(indexNum+2)+'"></td></tr>');
+        			    var currCell = $('td[data-q-index="'+call+'"');
+        			    currCell.text(call);
+        			    $('[data-index="' + (indexNum + 1).toString() + '"]').focus();
+
+
+        		} else {
+        			$('[data-index="' + (indexNum + 1).toString() + '"]').focus();
+
+        		}
+
+    		}  
+		});
+
+		$('input[data-index="0"]').focus();
+
+		$('#dailyForm').submit(function(e){
+			e.preventDefault();
+			var obj = {};
+			obj.array = [];
+			if($('#head').val()){
+				obj.head = $('#head').val()
+				$('#dailyForm tr.dat').each(function(){
+					var qObj = {};
+					qObj.qNum = $(this).find('.qId').text();
+					x = $(this).find('.question').val();
+					if(x){
+						qObj.question = x;
+						y = $(this).find('.answer').val();
+						if(y){
+							qObj.answer = y;
+							obj.array.push(qObj);
+							send = true;
+						} else {
+							alert("empty cell");
+							send = false;
+							return false;
+						}
+					} else {
+						alert('empty cell');
+						send = false;
+						return false;
+					};
+				});
+				if(send){
+					var pkg = JSON.stringify(obj);
+					$.post('formProcess.php', pkg, function(data){
+        	        	console.log(data);
+        	        	window.location='index.html';
+            		});
+				}
+			} else {
+				alert("Please enter form heading")
+			};
+		})
+    });
+    </script>
+</head>
+<body>
+	<p id='user-name'></p>
+	<form id="dailyForm" action="formProcess.php" method="post" autocomplete="off">
+		<input type="text" id="head" data-index="0">
+		<table>
+			<tr>
+				<th>#</th>
+				<th>Question</th>
+				<th>Answer</th>
+			<tr class="dat">
+				<td class="qId" data-q-index = "1"></td>
+				<td><input class = "question" type = "text" style="width:300px" data-index="1"></td>
+				<td><input class = "answer" type = "text" data-index="2"></td>
+			</tr>
+		</table>
+		<input type="submit">
+	</form>
+</body>
+</html>

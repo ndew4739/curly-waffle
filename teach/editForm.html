@@ -1,0 +1,128 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8">
+    <title>Edit Forms</title> 
+      <link rel="stylesheet" href="gridcss.css">
+	<script src="jquery-1.11.3.min.js"></script>
+	<script src="jquery-ui.min.js"></script>
+    <script>
+    $(document).ready(function(){
+      $.getJSON("formRetrieve.php", function(data) {
+      	$( '#user-name' ).text(data[0].username);
+      	console.log(data);
+        var x = data.length;
+        var currentForm;
+        var questions;
+        var display;
+        var answer;
+        var correct = 0;
+        for(i=0;i<x;i++){
+          $('#titleList').append('<tr><td class="title" data-index="'+data[i].formID+'">'+data[i].title+'</td></tr>');
+        }
+        $('.title').click(function(){
+          var q = $(this).attr("data-index");
+//          console.log(q);
+          for(j=0;j<x;j++){
+            if(data[j].formID == q){
+              currentForm=data[j];
+              questions = JSON.parse(currentForm.questions);
+              totalQ = questions.length;
+              console.log(questions);
+            }
+          }
+          $('#titleList').remove();
+          $('#task').show();
+          $('#go').click(function(){
+            $('#go').remove();
+            $('#guessInput').show().focus();
+            showSum();
+          });
+          function showSum(){
+            if (totalQ > 0) {
+              currentQ = questions.shift();
+//              console.log(currentQ.question);          
+              display = currentQ.question;
+              answer = currentQ.answer;
+              console.log(answer);
+              $('#here').text(display);
+              $('#guessInput').focus();
+            } else {
+              console.log("finished");
+            }
+          }
+          $('#checkAns').submit(function( event ){
+           event.preventDefault();
+            b = $('#guessInput').val();
+            if(b === answer){
+              console.log("correct!")
+              $('#guessInput').val("");
+              $('#answer-form').css("border", "10px solid green");
+              showSum();
+              correct++
+            } else {
+              $('#guessInput').val("");
+              $('#answer-form').css("border", "10px solid red");
+              $('#seeAns').show();
+            }
+            $('#seeAns').click(function(){
+              $('#seeErr').show();
+              $('#seeAns').hide();
+              $('#guessInput').val("").hide();
+              $('#accuracy').text("Correct answer: " + display + "-------->" + answer).show();              
+            });
+          });
+          $('#seeErr').click(function(e){
+            event.preventDefault();
+            $('#answer-form').css('border', '2px black solid');
+            $('#seeErr').hide();
+            $('#accuracy').text('');
+            $('#guessInput').show().focus();
+            showSum();
+          })
+          /* See answer function
+              $('#seeErr').show();
+              $('#guessInput').val("").hide();
+              correct = 0;
+              $('#accuracy').text("Correct answer: " + display + "-------->" + answer).show();
+              */
+        });
+      }).fail(function(data) {
+        $("#login-section").load("teacher-login.html");
+      });
+    });
+    </script>
+</head>
+<body>
+  <p id='user-name'></p>
+  <div>
+    <table id="titleList">
+    </table>
+  </div>
+  <div id="task" style="display:none">
+      <div>
+        <p id="user-name"></p>
+        <p id="level"></p>
+    </div>
+    <button id="go" style="height:50px;width:100px;margin:50px">GO!</button>
+    <div id="answer-form" style="border:2px black solid; padding: 10px">
+        <form id="checkAns" action="no-exist.php">
+            <div class="input-group">
+                <p id="here" style="color:black"></p>
+            </div>
+            <div class="input-group">
+                <input type="text" id="guessInput" style="display:none; width:100px" autocomplete="off" class="form-control"/>
+
+            </div>
+
+        </form>
+      <button id="seeErr" style="display:none">Okay</button>
+      <button id="seeAns" style="display:none">See Answer</button>
+    </div>
+    <div><h1 style="display:none" id="accuracy">Correct answer:</h1></div>
+    <div style="display:none" id="time"></div>
+    <a id="replay" style="display:none" href = "addsub.html">REPLAY</a>
+    <a id="home" href = "../maths">HOME</a>
+</div>
+</body>
+</html>

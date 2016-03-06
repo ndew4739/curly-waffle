@@ -46,4 +46,6 @@ if ($mysqli->query($sql2) === TRUE) {
     echo "Error: " . $sql2 . "<br>" . $mysqli->error;
 };
 
+$mysqli->close();
+
 ?>
