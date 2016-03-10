@@ -76,7 +76,12 @@
   </script>
 </head>
 <body>
+  <div class="news-title">
+    <h1>Theme Lists</h1>
+</div>
+
 	<div id="addCont">
+<button class="modButtons"><a href="index.html" style="text-decoration:none; color:black;margin-bottom:5px">Home</a></button>
     <button id="new-list" class="modButtons">+ New List</button>
   </div>
   <div id="contAdd">
@@ -113,7 +118,7 @@ if ($result->num_rows > 0) {
     echo "<table><tr><th>Title</th></tr>";
     while($row = $result->fetch_assoc()){
         $title = $row["title"];
-        echo "<tr><td class = 'select'><a href= 'forms.php?username=$username&title=$title'>".$title."</a></td>";
+        echo "<tr><td class = 'select'><a href= 'themeRetrieve.php?username=$username&title=$title'>".$title."</a></td>";
     }
     echo "</table>";
 } else {

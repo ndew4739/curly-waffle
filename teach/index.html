@@ -30,11 +30,11 @@
           $(this).css( "width", "80%");
         });
       });
-      $("#literacy").off().on( 'click', function(){
+      /*$("#literacy").off().on( 'click', function(){
         $("#main-section").load("literacy.html", function(){
           $(this).css( "width", "50%");
         });
-      });
+      });*/
       $("#groups").off().on( 'click', function(){
         $("#main-section").load("groups.html", function(){
           $(this).css("width", "100%");
@@ -61,10 +61,12 @@
 	<ul id="left-side">
 		<li><a id="home" href="#">Home</a>
 		<li><a id="numeracy" href="#">Numeracy</a></li>
-		<li><a id="literacy" href="#">Literacy</a></li>
-		<li><a id="groups" href="#">Groups</a></li>
+		<li><a id="literacy" href="literacy.html">Literacy</a></li>
+		<!-- <li><a id="groups" href="#">Groups</a></li> -->
 		<li><a id="class" href="#">Class</a></li>
     <li><a id="afl" href="set-question.html">AFL</a></li>
+    <li><a href = "dailyForm.html">Set Work</a></li>
+    <li><a href="formSummary.php">Check Work</a></li>
 	</ul>
     <ul id="right-side">
     	<li id="user-name"></li>

@@ -90,10 +90,14 @@
     </script>
 </head>
 <body>
-	<p id='user-name'></p>
+	<p id='user-name' style="color:white"></p>
+	<a href="index.html" style="text-decoration:none; color:white;margin-bottom:5px">Home</a>
 	<form id="dailyForm" action="formProcess.php" method="post" autocomplete="off">
-		<input type="text" id="head" data-index="0">
+		
 		<table>
+			<tr>
+				<th colspan = "5">Title: <input type="text" id="head" data-index="0"></th>
+			</tr>
 			<tr>
 				<th>#</th>
 				<th>Question</th>

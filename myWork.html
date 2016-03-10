@@ -9,7 +9,7 @@
     <script>
     $(document).ready(function(){
       $.getJSON("formRetrieve.php", function(data) {
-      	$( '#user-name' ).text(data[0].username);
+      	$( '#user-name' ).text(data[0].class);
       	console.log(data);
         var x = data.length;
         var currentForm;
@@ -21,7 +21,7 @@
         var array = [];
         var sendObj = {};
         for(i=0;i<x;i++){
-          $('#titleList').append('<div class="title" data-index="'+data[i].formID+'">'+data[i].title+'</div>');
+          $('#titleList').append('<div class="title select" data-index="'+data[i].formID+'">'+data[i].title+'</div>');
         }
         $('.title').click(function(){
           var q = $(this).attr("data-index");
@@ -40,7 +40,7 @@
           $('#task').show();
           $('#go').click(function(){
             $('#go').remove();
-            $('#guessInput').show().focus();
+            $('#answer-form').show().focus();
             showSum();
           });
           function showSum(){
@@ -126,7 +126,7 @@
     </script>
 </head>
 <body>
-  <p id='user-name'></p>
+  <p id='user-name' style="font-size:18px"></p>
   <div>
     <div id="titleList">
     </div>
@@ -137,13 +137,13 @@
         <p id="level"></p>
     </div>
     <button id="go" style="height:50px;width:100px;margin:50px">GO!</button>
-    <div id="answer-form" style="border:2px black solid; padding: 10px">
+    <div id="answer-form" style="border:2px black solid; padding: 10px;display:none">
         <form id="checkAns" action="no-exist.php">
             <div class="input-group">
-                <p id="here" style="color:black"></p>
+                <p id="here" style="color:black; font-size:20px"></p>
             </div>
             <div class="input-group">
-                <input type="text" id="guessInput" style="display:none; width:100px" autocomplete="off" class="form-control"/>
+                <input type="text" id="guessInput" style="width:300px; font-family:Arial;font-size:24px" autocomplete="off" class="form-control"/>
 
             </div>
 
@@ -154,7 +154,7 @@
     <div><h1 style="display:none" id="accuracy">Correct answer:</h1></div>
     <div style="display:none" id="time"></div>
     <a id="replay" style="display:none" href = "addsub.html">REPLAY</a>
-    <a id="home" href = "../maths">HOME</a>
+    <a id="home" href = "index.html">HOME</a>
 </div>
 </body>
 </html>
