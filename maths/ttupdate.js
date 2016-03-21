@@ -1,3 +1,4 @@
+
 // set variables
 
 var arr;
@@ -209,7 +210,9 @@ function checkAns() {
             locate();
         } else {
             finish();
-        }        
+        }
+    } else if (Uans === ""){
+        return false;        
     } else {
         timeArray.error++;
         ob.err++;

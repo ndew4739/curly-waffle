@@ -6,9 +6,12 @@
   <script>
   $(document).ready(function(){
   	$.getJSON("fetch-class.php", function(data) {
+  		var groupOb = {};
+  		var array = [];
     	if(data.length>0){
       		for(i=0;i<data.length;i++){
-        		$('#main-div').append('<div class="nameTag present" style="border-radius:5px; margin: 10px 10px 10px 10px; position:relative; height:50px;width:100px;text-align:center; display:inline-block" data-sid='+data[i].Sid+'><div style="position:absolute; margin-left:15px; margin-top:7px"><div style="overflow:hidden; text-overflow:ellipsis; height: 18px; width: 85px; font-size: 18px; text-align: left">'+data[i].firstname+'</div><div style="overflow: hidden; text-overflow: ellipsis; height: 18px; width: 85px; font-size: 16px; text-align:left">'+data[i].lastname+'</div></div></div>');
+
+        		$('#main-div').append('<div class="nameTag present" style="border-radius:5px; margin: 10px 10px 10px 10px; position:relative; height:50px;width:100px;text-align:center; display:inline-block" data-sid='+data[i].Sid+'><div style="position:absolute; margin-left:15px; margin-top:7px"><div class="firstName" style="overflow:hidden; text-overflow:ellipsis; height: 18px; width: 85px; font-size: 18px; text-align: left">'+data[i].firstname+'</div><div style="overflow: hidden; text-overflow: ellipsis; height: 18px; width: 85px; font-size: 16px; text-align:left">'+data[i].lastname+'</div></div></div>');
       		};
     	} else {
       		Alert("You need to add your class first.");
@@ -25,10 +28,72 @@
 	    })
 	    $('#attendance').off().on( 'click', function(){
 	    	$('.absent').remove();
-	    	$('#low-bar').remove();
-	    	$('.nameTag').each(function(){
-	    		$(this).removeClass('present').css('background-color', '#cfebfd');
+	    	$('.firstName').each(function(index) {
+	    		var ff = $(this).text();
+	    		array.push(ff);
 	    	})
+	    	console.log(array);
+	    	$('#check').remove();
+	    	$('#selector').show();
+	    	$('.nameTag').each(function(){
+	    		$(this).css('background-color', '#cfebfd');
+	    	})
+	    })
+	    Array.prototype.shuffle = function() {
+    		var input = this;     
+    		for (var i = input.length-1; i >=0; i--) {     
+        		var randomIndex = Math.floor(Math.random()*(i+1)); 
+        		var itemAtIndex = input[randomIndex]; 
+        		input[randomIndex] = input[i]; 
+        		input[i] = itemAtIndex;
+    		}
+    		return input;
+		}
+	    $('#grouper').click(function(){
+	    	$('#main-div').empty();
+	    	array.shuffle();
+	    	console.log(array);
+	    	if(!($('#groupNum') === "")){
+	    		var groupNum = $('#groupNum').val();
+	    		var lo = array % groupNum;
+	    		var totalGroups = Math.round(array.length/groupNum);
+	    		console.log(totalGroups);
+	    		for(i=0;i<totalGroups;i++){
+	    			groupOb['group' + (i+1)] = [];
+	    		}
+	    		console.log(groupOb);
+	    		if(lo > 0){
+	    			for (i=0;i<lo;i++){
+	    				var a = array.pop();
+	    				var b = groupOb['group'+(i+1)];
+	    				b.push(a);
+	    			}
+	    		}
+	    		while(array.length > 0){
+	    			for(i=0;i<totalGroups;i++){
+	    				if(array.length>0){
+	    					var a = array.pop();
+	    					var b = groupOb['group'+(i+1)];
+	    					b.push(a);
+	    				} else {
+	    					break;
+	    				}
+	    			}	
+	    		}
+	    		for (i=0;i<totalGroups;i++){
+	    			var gogo = groupOb["group"+(i+1)].length;
+	    			var gigi = groupOb["group"+(i+1)];
+	    			$('#main-div').append('<div class="nameTag present" data-index="'+i+'"" style="padding-top:20px;border-radius:5px; margin: 10px 10px 10px 10px; position:relative; height:'+(20+((groupOb["group"+(i+1)].length)*20))+'px;width:100px;text-align:center; display:inline-block"><div class="nameHere'+i+'"></div></div>');
+	    			
+	    			for(j=0;j<gogo;j++){
+	    				$('div[data-index="'+i+'"]').append('<div>'+ gigi[j] + '</div>');
+	    			}
+	    		}
+	    		console.log(groupOb);
+	    		$('#selector').remove();
+	    	} else {
+	    		alert("How many in each group?");
+	    	}
 	    })
 	});
 });  
@@ -36,6 +101,10 @@
 </head>
 <body>
 	<div id="main-div"></div>
-	<div id="low-bar"><div id="removeMsg"><p>Remove absent students</p></div><button id="attendance">Completed</button></div>
+	<div id="low-bar">
+		<div id="check"><div id="removeMsg"><p>Remove absent students</p></div><button id="attendance">Completed</button></div>
+		<div style="padding-left:100px;display:none;width:800px" id="selector"><div id="groupQ"><p style="width:250px">Number in each group:</p></div><div style="width:250px"><input id="groupNum" type="number"></div><div><button id="grouper" style="margin-top:-30px">Go</button></div></div>
+		
+	</div>
 </body>
 </html>

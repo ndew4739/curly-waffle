@@ -1,0 +1,52 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8">
+    <title>Punctuation</title> 
+      <link rel="stylesheet" href="style.css?v=3">
+      <style>
+      th{
+        text-align:right;
+      }
+      input[type="text"]{
+        width:500px;
+        padding-right:40px;
+      }
+      table{
+        width:auto;
+      }
+      </style>
+	<script src="jquery-1.11.3.min.js"></script>
+	<script src="jquery-ui.min.js"></script>
+    <script>
+    $(document).ready(function(){
+    	$.getJSON("checksession.php", function(data) {
+      		$( '#user-name' ).text(data.title + " " + data.last_name);
+      		console.log(data);
+    	}).fail(function(data) {
+      		$("#login-section").load("teacher-login.html");
+    	});
+    });
+    </script>
+
+<body>
+  <p id='user-name' style="color:white"></p>
+  <a href="index.html" style="text-decoration:none; color:white;margin-bottom:5px">Home</a>
+  <form id="puncForm" action="formProcess.php" method="post" autocomplete="off">
+    
+    <table>
+      <tr>
+        <th>Error: </th><td><input type="text" id="error"></td>
+      </tr>
+      <tr>
+        <th>Corrected: </th><td><input type="text" id="corrected"></td>
+      </tr>
+      <tr>
+        <th>Model(optional): </th><td><input type="text" id="model" data-index="0"></td>
+      </tr>
+
+    </table>
+    <input type="submit">
+  </form>
+</body>
+</html>

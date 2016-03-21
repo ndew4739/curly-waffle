@@ -40,6 +40,25 @@
 						case '7':
 							$('#main-feed').prepend('<p class="alert"><a href="#">' + msg[i].username + '</a><br/><br/>Time 3, Adding and subtracting hours (24hr time, hours and minutes(10)): ' + msg[i].comments);	
 								break;			
+						case '8':
+							$('#main-feed').prepend('<p class="alert"><a href="#">' + msg[i].username + '</a><br/><br/>mm and cm, 10 streak: ' + msg[i].comments);	
+								break;			
+						case '9':
+							$('#main-feed').prepend('<p class="alert"><a href="#">' + msg[i].username + '</a><br/><br/>cm and m, 10 streak: ' + msg[i].comments);	
+								break;			
+						case '10':
+							$('#main-feed').prepend('<p class="alert"><a href="#">' + msg[i].username + '</a><br/><br/>m and km, 10 streak: ' + msg[i].comments);	
+								break;			
+						case '11':
+							$('#main-feed').prepend('<p class="alert"><a href="#">' + msg[i].username + '</a><br/><br/>multiplying by 10: ' + msg[i].comments);	
+								break;			
+						case '12':
+							$('#main-feed').prepend('<p class="alert"><a href="#">' + msg[i].username + '</a><br/><br/>dividing by 10: ' + msg[i].comments);	
+								break;			
+						case '13':
+							$('#main-feed').prepend('<p class="alert"><a href="#">' + msg[i].username + '</a><br/><br/>Mixed length: ' + msg[i].comments);	
+								break;			
+
 						default:
 							$('#main-feed').prepend('<p class="alert">' + msg[i].username + '<br/>Cannot read message');
 					}

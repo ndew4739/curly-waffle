@@ -1,11 +1,4 @@
-<?php
-session_start();
-if(!$_SESSION['user_login_status']==1){
-header("Location: main_login.php");
-}
-$username = $_SESSION['username'];
-echo $username;
-?>
+
 <!DOCTYPE html>
 <html>
 <head>
@@ -234,6 +227,12 @@ echo $username;
 <script>
 
 $(document).ready(function(){
+            $.getJSON("../checksession.php", function(data) {
+            console.log(data);
+            // todo: save data locally for offline mode
+        }).fail(function(data) {
+            window.location = "../main_login.html";
+        });
   $.get("divfetchlevel.php", function( data ){
   level = data;
     setList(level);

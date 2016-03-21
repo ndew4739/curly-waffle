@@ -78,25 +78,27 @@ function logArray(array){
 function setList(ttLevel) {
     var ttLevel = ttLevel; 
     switch(ttLevel){
-        case "1":
+//         Omitted these easier versions
+/*        case "1":
             ttList=yearThree.setPairs(control);
             break;
         case "2":
             ttList=yearThree.setPairs(control2);
-            break;
-        case "3":
+            break;*/
+        case "1":
             ttList=yearThree.setPairs(control).shuffle().keepLine(yearThree);
             break;
-        case "4":
+        case "2":
             ttList=yearThree.setPairs(control).shuffle();
             break;
-        case "5":
+// Omitted easier versions
+/*        case "5":
             ttList=yearFour.setPairs(control);
             break;
         case "6":
             ttList=yearFour.setPairs(control2);
-            break;
-        case "7":
+            break;*/
+        case "3":
             ttList=yearFour.setPairs(control).shuffle().keepLine(yearFour);
             break;
         default:
